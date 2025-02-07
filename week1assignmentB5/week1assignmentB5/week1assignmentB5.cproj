@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>Week1AssignmentB2</AssemblyName>
-    <Name>Week1AssignmentB2</Name>
-    <RootNamespace>Week1AssignmentB2</RootNamespace>
+    <AssemblyName>week1assignmentB5</AssemblyName>
+    <Name>week1assignmentB5</Name>
+    <RootNamespace>week1assignmentB5</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
