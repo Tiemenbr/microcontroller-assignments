@@ -50,7 +50,6 @@ void display(int digit)
 
 int main(void)
 {
-	DDRA = 0xFF;
 	DDRB = 0xFF; //enable write
 	DDRD = 0x00; //enable read
 	
@@ -68,9 +67,8 @@ int main(void)
 		}
 		
 		display(index);
-		PORTA = index; //debugging write index
 		
-		wait(100); //to prevent dubble clicking
+		wait(100); //to prevent double clicking
     }
 }
 
