@@ -16,7 +16,16 @@ typedef struct {
 } PATTERN_STRUCT;
 
 PATTERN_STRUCT pattern[] = {
-	
+	//  Dgfedcba
+	{ 0b00000011, 50 },//ab
+	{ 0b01000010, 50 },//bg
+	{ 0b01010000, 50 },//ge
+	{ 0b00011000, 50 },//ed
+	{ 0b00001100, 50 },//dc
+	{ 0b01000100, 50 },//cg
+	{ 0b01100000, 50 },//gf
+	{ 0b00100001, 50 },//fa
+	{ 0x00, 0x00 } //terminator
 };
 
 void wait( int ms ) {
@@ -34,7 +43,7 @@ int main( void )
 		int index = 0;
 		// as long as delay has meaningful content
 		while( pattern[index].delay != 0 ) {
-			// Write data to PORTD
+			// Write data to PORTB
 			PORTB = pattern[index].data;
 			// wait
 			wait(pattern[index].delay);
