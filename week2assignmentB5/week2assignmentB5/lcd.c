@@ -5,70 +5,134 @@
  *  Author: tieme
  */ 
 
-#include "init"
+#define F_CPU 8e6
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+#include "lcd.h"
+
+#define LCD_E 	3
+#define LCD_RS	2
 
 typedef unsigned char byte;
 
 
-void lcd_strobe_lcd_e(void)
-{
-	PORTA |= (1<<6);
-	_delay_ms(1);
-	PORTA &= ~(1<<6);
-	_delay_ms(1);
+/******************************************************************
+short:			Strobe LCD module E pin --__
+inputs:
+outputs:
+notes:			According data sheet HD44780
+Version :    	DMK, Initial code
+*******************************************************************/
+void lcd_strobe_lcd_e(void) {
+	PORTC |= (1<<LCD_E);	// E high
+	_delay_ms(1);			// nodig
+	PORTC &= ~(1<<LCD_E);  	// E low
+	_delay_ms(1);			// nodig?
 }
 
-void lcd_cmd_high_nibble(byte cmd)
-{
-	PORTC = (cmd & 0xF0); // High nibble to PC4-7
-	PORTA &= ~(1<<4); // Force RS=PA4 low
-}
+/******************************************************************
+short:			Init LCD module in 4 bits mode.
+inputs:
+outputs:
+notes:			According datasheet HD44780 table 12
+Version :    	DMK, Initial code
+*******************************************************************/
+void init_4bits_mode(void) {
+	// PORTC output mode and all low (also E and RS pin)
+	DDRC = 0xFF;
+	PORTC = 0x00;
 
-void lcd_cmd_low_nibble(byte cmd)
-{
-	PORTC = (cmd & 0x0F) << 4; // Low nibble to PC4-7
-	PORTA &= ~(1<<4); // Force RS=PA4 low
-}
-
-void lcd_data_high_nibble(byte data)
-{
-	PORTC = (data & 0xF0); // High nibble to PC4-7
-	PORTA |= (1<<4); // Force RS=PA4 high
-}
-
-void lcd_data_low_nibble(byte data)
-{
-	PORTC = (data & 0x0F) << 4; // Low nibble to PC4-7
-	PORTA |= (1<<4); // Force RS=PA4 high
-}
-
-void lcd_command(byte cmd)
-{
-	lcd_cmd_high_nibble(cmd);
+	// Step 2 (table 12)
+	PORTC = 0x20;	// function set
 	lcd_strobe_lcd_e();
-	lcd_cmd_low_nibble(cmd);
+
+	// Step 3 (table 12)
+	PORTC = 0x20;   // function set
+	lcd_strobe_lcd_e();
+	PORTC = 0x80;
+	lcd_strobe_lcd_e();
+
+	// Step 4 (table 12)
+	PORTC = 0x00;   // Display on/off control
+	lcd_strobe_lcd_e();
+	PORTC = 0xF0;
+	lcd_strobe_lcd_e();
+
+	// Step 4 (table 12)
+	PORTC = 0x00;   // Entry mode set
+	lcd_strobe_lcd_e();
+	PORTC = 0x60;
+	lcd_strobe_lcd_e();
+
+}
+
+/******************************************************************
+short:			Writes string to LCD at cursor position
+inputs:
+outputs:
+notes:			According datasheet HD44780 table 12
+Version :    	DMK, Initial code
+*******************************************************************/
+void lcd_write_string(char *str) {
+	// Het kan met een while:
+
+	// while(*str) {
+	// 	lcd_write_data(*str++);
+	// }
+
+	// of met een for:
+	for(;*str; str++){
+		lcd_write_data(*str);
+	}
+}
+
+/******************************************************************
+short:			Writes 8 bits DATA to lcd
+inputs:			byte - written to LCD
+outputs:
+notes:			According datasheet HD44780 table 12
+Version :    	DMK, Initial code
+*******************************************************************/
+void lcd_write_data(unsigned char byte) {
+	// First nibble.
+	PORTC = byte;
+	PORTC |= (1<<LCD_RS);
+	lcd_strobe_lcd_e();
+
+	// Second nibble
+	PORTC = (byte<<4);
+	PORTC |= (1<<LCD_RS);
 	lcd_strobe_lcd_e();
 }
 
-void lcd_data(byte data)
+/******************************************************************
+short:			Writes 8 bits COMMAND to lcd
+inputs:			byte - written to LCD
+outputs:
+notes:			According datasheet HD44780 table 12
+Version :    	DMK, Initial code
+*******************************************************************/
+void lcd_write_command(unsigned char byte)
+
 {
-	lcd_data_high_nibble(data);
+	// First nibble.
+	PORTC = byte;
+	PORTC &= ~(1<<LCD_RS);
 	lcd_strobe_lcd_e();
-	lcd_data_low_nibble(data);
+
+	// Second nibble
+	PORTC = (byte<<4);
+	PORTC &= ~(1<<LCD_RS);
 	lcd_strobe_lcd_e();
 }
-
 
 void init(void)
 {
-	// return home
-	lcd_command( 0x02 );
-	// mode: 4 bits interface data, 2 lines, 5x8 dots
-	lcd_command( 0x28 );
-	// display: on, cursor off, blinking off
-	lcd_command( 0x0C );
-	// entry mode: cursor to right, no shift
-	lcd_command( 0x06 );
-	// RAM address: 0, first position, line 1
-	lcd_command( 0x80 );
+	init_4bits_mode();
+}
+
+void display_text(char *str) 
+{
+	lcd_write_string(*str);
 }
