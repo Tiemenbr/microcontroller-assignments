@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "microcontroller-assignments", "microcontroller-assignments.cproj", "{DCE6C7E3-EE26-4D79-826B-08594B9AD897}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "week1", "week1", "{FB97C21A-DEC2-4EB7-B307-C451A3990176}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "AssignmentA", "..\AssignmentA\AssignmentA.cproj", "{3AB41C7C-EC97-4450-AC17-5F0719B5743C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|AVR.ActiveCfg = Debug|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|AVR.Build.0 = Debug|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|AVR.ActiveCfg = Release|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|AVR.Build.0 = Release|AVR
+		{3AB41C7C-EC97-4450-AC17-5F0719B5743C}.Debug|AVR.ActiveCfg = Debug|AVR
+		{3AB41C7C-EC97-4450-AC17-5F0719B5743C}.Debug|AVR.Build.0 = Debug|AVR
+		{3AB41C7C-EC97-4450-AC17-5F0719B5743C}.Release|AVR.ActiveCfg = Release|AVR
+		{3AB41C7C-EC97-4450-AC17-5F0719B5743C}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3AB41C7C-EC97-4450-AC17-5F0719B5743C} = {FB97C21A-DEC2-4EB7-B307-C451A3990176}
+	EndGlobalSection
+EndGlobal
