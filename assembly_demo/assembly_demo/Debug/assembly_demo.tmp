@@ -1,0 +1,33 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega128"</DEVICE>
+ <WORKING_DIR>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m128def.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\Debug\assembly_demo.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>assembly_demo.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>assembly_demo.map</FILE>
+  <FILE>assembly_demo.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <init><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>16</LINE></init>
+  <main><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>22</LINE></main>
+  <loop><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>28</LINE></loop>
+  <delay><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>37</LINE></delay>
+  <delay_1ms><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>38</LINE></delay_1ms>
+  <delay_1ms_loop1><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>40</LINE></delay_1ms_loop1>
+  <delay_1ms_loop2><FILE>C:\dev\microcontroller-assignments\assembly_demo\assembly_demo\main.asm</FILE><LINE>42</LINE></delay_1ms_loop2>
+ </LABELS>
+</ASSEMBLER_INFO>
