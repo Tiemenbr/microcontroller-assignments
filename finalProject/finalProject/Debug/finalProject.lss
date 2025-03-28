@@ -1,0 +1,264 @@
+
+finalProject.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00800100  00000196  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000142  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  00000196  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001c8  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000048  00000000  00000000  00000204  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000096f  00000000  00000000  0000024c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000858  00000000  00000000  00000bbb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000364  00000000  00000000  00001413  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000bc  00000000  00000000  00001778  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000439  00000000  00000000  00001834  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000001ad  00000000  00000000  00001c6d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000038  00000000  00000000  00001e1a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	45 c0       	rjmp	.+138    	; 0x8c <__ctors_end>
+   2:	00 00       	nop
+   4:	4b c0       	rjmp	.+150    	; 0x9c <__bad_interrupt>
+   6:	00 00       	nop
+   8:	49 c0       	rjmp	.+146    	; 0x9c <__bad_interrupt>
+   a:	00 00       	nop
+   c:	47 c0       	rjmp	.+142    	; 0x9c <__bad_interrupt>
+   e:	00 00       	nop
+  10:	45 c0       	rjmp	.+138    	; 0x9c <__bad_interrupt>
+  12:	00 00       	nop
+  14:	43 c0       	rjmp	.+134    	; 0x9c <__bad_interrupt>
+  16:	00 00       	nop
+  18:	41 c0       	rjmp	.+130    	; 0x9c <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	3f c0       	rjmp	.+126    	; 0x9c <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	3d c0       	rjmp	.+122    	; 0x9c <__bad_interrupt>
+  22:	00 00       	nop
+  24:	3b c0       	rjmp	.+118    	; 0x9c <__bad_interrupt>
+  26:	00 00       	nop
+  28:	39 c0       	rjmp	.+114    	; 0x9c <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	37 c0       	rjmp	.+110    	; 0x9c <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	35 c0       	rjmp	.+106    	; 0x9c <__bad_interrupt>
+  32:	00 00       	nop
+  34:	33 c0       	rjmp	.+102    	; 0x9c <__bad_interrupt>
+  36:	00 00       	nop
+  38:	31 c0       	rjmp	.+98     	; 0x9c <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	2f c0       	rjmp	.+94     	; 0x9c <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	2d c0       	rjmp	.+90     	; 0x9c <__bad_interrupt>
+  42:	00 00       	nop
+  44:	2b c0       	rjmp	.+86     	; 0x9c <__bad_interrupt>
+  46:	00 00       	nop
+  48:	29 c0       	rjmp	.+82     	; 0x9c <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	27 c0       	rjmp	.+78     	; 0x9c <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	25 c0       	rjmp	.+74     	; 0x9c <__bad_interrupt>
+  52:	00 00       	nop
+  54:	2f c0       	rjmp	.+94     	; 0xb4 <__vector_21>
+  56:	00 00       	nop
+  58:	21 c0       	rjmp	.+66     	; 0x9c <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	1f c0       	rjmp	.+62     	; 0x9c <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	1d c0       	rjmp	.+58     	; 0x9c <__bad_interrupt>
+  62:	00 00       	nop
+  64:	1b c0       	rjmp	.+54     	; 0x9c <__bad_interrupt>
+  66:	00 00       	nop
+  68:	19 c0       	rjmp	.+50     	; 0x9c <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	17 c0       	rjmp	.+46     	; 0x9c <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	15 c0       	rjmp	.+42     	; 0x9c <__bad_interrupt>
+  72:	00 00       	nop
+  74:	13 c0       	rjmp	.+38     	; 0x9c <__bad_interrupt>
+  76:	00 00       	nop
+  78:	11 c0       	rjmp	.+34     	; 0x9c <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	0f c0       	rjmp	.+30     	; 0x9c <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	0d c0       	rjmp	.+26     	; 0x9c <__bad_interrupt>
+  82:	00 00       	nop
+  84:	0b c0       	rjmp	.+22     	; 0x9c <__bad_interrupt>
+  86:	00 00       	nop
+  88:	09 c0       	rjmp	.+18     	; 0x9c <__bad_interrupt>
+	...
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	49 d0       	rcall	.+146    	; 0x12c <main>
+  9a:	51 c0       	rjmp	.+162    	; 0x13e <_exit>
+
+0000009c <__bad_interrupt>:
+  9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
+
+0000009e <adcInit>:
+
+
+// Initialize ADC: 10-bits (left justified), free running
+void adcInit( void )
+{
+	ADMUX = 0b01100001;			// AREF=VCC, result left adjusted, channel1 at pin PF1
+  9e:	81 e6       	ldi	r24, 0x61	; 97
+  a0:	87 b9       	out	0x07, r24	; 7
+	ADCSRA = 0b11101110;		// ADC-enable, interrupt, start, no free running, division by 64
+  a2:	8e ee       	ldi	r24, 0xEE	; 238
+  a4:	86 b9       	out	0x06, r24	; 6
+  a6:	08 95       	ret
+
+000000a8 <adcMin>:
+}
+
+void adcMin( void )
+{
+	PORTC = 1;
+  a8:	81 e0       	ldi	r24, 0x01	; 1
+  aa:	85 bb       	out	0x15, r24	; 21
+  ac:	08 95       	ret
+
+000000ae <adcMax>:
+}
+
+void adcMax( void )
+{
+	PORTC = 3;
+  ae:	83 e0       	ldi	r24, 0x03	; 3
+  b0:	85 bb       	out	0x15, r24	; 21
+  b2:	08 95       	ret
+
+000000b4 <__vector_21>:
+}
+
+
+ISR (ADC_vect)
+{
+  b4:	1f 92       	push	r1
+  b6:	0f 92       	push	r0
+  b8:	0f b6       	in	r0, 0x3f	; 63
+  ba:	0f 92       	push	r0
+  bc:	11 24       	eor	r1, r1
+  be:	0b b6       	in	r0, 0x3b	; 59
+  c0:	0f 92       	push	r0
+  c2:	2f 93       	push	r18
+  c4:	3f 93       	push	r19
+  c6:	4f 93       	push	r20
+  c8:	5f 93       	push	r21
+  ca:	6f 93       	push	r22
+  cc:	7f 93       	push	r23
+  ce:	8f 93       	push	r24
+  d0:	9f 93       	push	r25
+  d2:	af 93       	push	r26
+  d4:	bf 93       	push	r27
+  d6:	ef 93       	push	r30
+  d8:	ff 93       	push	r31
+	int l = ADCL;
+  da:	24 b1       	in	r18, 0x04	; 4
+	int h = ADCH;
+  dc:	35 b1       	in	r19, 0x05	; 5
+  de:	83 2f       	mov	r24, r19
+  e0:	90 e0       	ldi	r25, 0x00	; 0
+
+	PORTB = l;			// Show MSB/LSB (bit 10:0) of ADC
+  e2:	28 bb       	out	0x18, r18	; 24
+	PORTA = h;
+  e4:	3b bb       	out	0x1b, r19	; 27
+		
+		
+	int adcOut = (h << 2) | l;
+  e6:	88 0f       	add	r24, r24
+  e8:	99 1f       	adc	r25, r25
+  ea:	88 0f       	add	r24, r24
+  ec:	99 1f       	adc	r25, r25
+  ee:	82 2b       	or	r24, r18
+	if (adcOut < ADCMIN)
+  f0:	80 31       	cpi	r24, 0x10	; 16
+  f2:	91 05       	cpc	r25, r1
+  f4:	14 f4       	brge	.+4      	; 0xfa <__vector_21+0x46>
+	{
+		adcMin();
+  f6:	d8 df       	rcall	.-80     	; 0xa8 <adcMin>
+  f8:	06 c0       	rjmp	.+12     	; 0x106 <__vector_21+0x52>
+	}
+	else if (adcOut > ADCMAX) 
+  fa:	80 3c       	cpi	r24, 0xC0	; 192
+  fc:	93 40       	sbci	r25, 0x03	; 3
+	{
+		adcMax();
+  fe:	14 f0       	brlt	.+4      	; 0x104 <__vector_21+0x50>
+ 100:	d6 df       	rcall	.-84     	; 0xae <adcMax>
+ 102:	01 c0       	rjmp	.+2      	; 0x106 <__vector_21+0x52>
+	}
+	else 
+	{
+		PORTC = 0;
+ 104:	15 ba       	out	0x15, r1	; 21
+	}
+}
+ 106:	ff 91       	pop	r31
+ 108:	ef 91       	pop	r30
+ 10a:	bf 91       	pop	r27
+ 10c:	af 91       	pop	r26
+ 10e:	9f 91       	pop	r25
+ 110:	8f 91       	pop	r24
+ 112:	7f 91       	pop	r23
+ 114:	6f 91       	pop	r22
+ 116:	5f 91       	pop	r21
+ 118:	4f 91       	pop	r20
+ 11a:	3f 91       	pop	r19
+ 11c:	2f 91       	pop	r18
+ 11e:	0f 90       	pop	r0
+ 120:	0b be       	out	0x3b, r0	; 59
+ 122:	0f 90       	pop	r0
+ 124:	0f be       	out	0x3f, r0	; 63
+ 126:	0f 90       	pop	r0
+ 128:	1f 90       	pop	r1
+ 12a:	18 95       	reti
+
+0000012c <main>:
+
+// Main program: ADC at PF1
+int main( void )
+{
+	DDRF = 0x00;				// set PORTF for input (ADC)
+ 12c:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <__TEXT_REGION_LENGTH__+0x7e0061>
+	DDRA = 0xFF;				// set PORTA for output 
+ 130:	8f ef       	ldi	r24, 0xFF	; 255
+ 132:	8a bb       	out	0x1a, r24	; 26
+	DDRB = 0xFF;				// set PORTB for output
+ 134:	87 bb       	out	0x17, r24	; 23
+	DDRC = 0xFF;				// set PORTC for output
+ 136:	84 bb       	out	0x14, r24	; 20
+	sei();
+ 138:	78 94       	sei
+	adcInit();					// initialize ADC
+ 13a:	b1 df       	rcall	.-158    	; 0x9e <adcInit>
+ 13c:	ff cf       	rjmp	.-2      	; 0x13c <main+0x10>
+
+0000013e <_exit>:
+ 13e:	f8 94       	cli
+
+00000140 <__stop_program>:
+ 140:	ff cf       	rjmp	.-2      	; 0x140 <__stop_program>
