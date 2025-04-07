@@ -19,6 +19,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <stdio.h>
+#include "lcd.h"
 
 #define BIT(x)	(1 << (x))
 
@@ -47,12 +49,17 @@ int main( void )
 	DDRF = 0x00;					// set PORTF for input (ADC)
 	DDRA = 0xFF;					// set PORTA for output 
 	adcInit();						// initialize ADC
-
+	init();
 	while (1)
 	{
 		ADCSRA |= BIT(6);				// Start ADC
 		while ( ADCSRA & BIT(6) ) ;		// Wait for completion
-		PORTA = ADCH;					// Show MSB (bit 9:2) of ADC
+		int degrees = ADCH;
+		PORTA = degrees;					// Show MSB (bit 9:2) of ADC
+		
+		char tmpStr[20];
+		snprintf(tmpStr, 20, "%d graden celsius", degrees);
+		display_text(tmpStr);
 		wait(500);						// every 50 ms (busy waiting)
 	}
 }
