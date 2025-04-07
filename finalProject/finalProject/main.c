@@ -11,6 +11,9 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+#include <avr/pgmspace.h>
+#include "HT16K33/display.h"
+
 #define BIT(x)	(1 << (x))
 #define ADCMIN 16
 #define ADCMAX 959
@@ -96,6 +99,7 @@ ISR(TIMER2_COMP_vect)
 // Main program: ADC at PF1
 int main( void )
 {
+	/*
 	DDRF = 0x00;				// set PORTF for input (ADC)
 	DDRA = 0xFF;				// set PORTA for output 
 	DDRB = 0xFF;				// set PORTB for output
@@ -105,9 +109,15 @@ int main( void )
 	timer2init();
 	sei();
 	adcInit();					// initialize ADC
+	*/
 	
+	displayInit();
+	wait(500);
+
 	while (1)
 	{
-		
+		displayClr();
+		displaySetPixel(1,1);
+		display();
 	}
 }
