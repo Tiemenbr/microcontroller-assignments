@@ -23,7 +23,6 @@ void lcd_write_command(unsigned char byte);
 void init(void);
 void display_text(char *str);
 
-
 /******************************************************************
 short:			Strobe LCD module E pin --__
 inputs:
@@ -37,6 +36,13 @@ void lcd_strobe_lcd_e(void) {
 	PORTC &= ~(1<<LCD_E);  	// E low
 	_delay_ms(1);			// nodig?
 }
+
+void clear()
+{
+	lcd_write_command(0x01);
+	lcd_write_command(0x02);
+}
+
 
 /******************************************************************
 short:			Init LCD module in 4 bits mode.
@@ -141,5 +147,6 @@ void init(void)
 
 void display_text(char *str) 
 {
-	lcd_write_string(*str);
+	clear();
+	lcd_write_string(str);
 }

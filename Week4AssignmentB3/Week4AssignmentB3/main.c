@@ -50,6 +50,8 @@ int main( void )
 	DDRA = 0xFF;					// set PORTA for output 
 	adcInit();						// initialize ADC
 	init();
+	char tmpStr[20];
+	
 	while (1)
 	{
 		ADCSRA |= BIT(6);				// Start ADC
@@ -57,8 +59,7 @@ int main( void )
 		int degrees = ADCH;
 		PORTA = degrees;					// Show MSB (bit 9:2) of ADC
 		
-		char tmpStr[20];
-		snprintf(tmpStr, 20, "%d graden celsius", degrees);
+		snprintf(tmpStr, 20, "%d.%d degrees C", degrees/10, degrees%10);
 		display_text(tmpStr);
 		wait(500);						// every 50 ms (busy waiting)
 	}
