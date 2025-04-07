@@ -16,14 +16,10 @@
 
 typedef unsigned char byte;
 
+void lcd_write_data(unsigned char byte);
+void lcd_write_command(unsigned char byte);
 
-/******************************************************************
-short:			Strobe LCD module E pin --__
-inputs:
-outputs:
-notes:			According data sheet HD44780
-Version :    	DMK, Initial code
-*******************************************************************/
+
 void lcd_strobe_lcd_e(void) {
 	PORTC |= (1<<LCD_E);	// E high
 	_delay_ms(1);			// nodig
@@ -31,14 +27,8 @@ void lcd_strobe_lcd_e(void) {
 	_delay_ms(1);			// nodig?
 }
 
-/******************************************************************
-short:			Init LCD module in 4 bits mode.
-inputs:
-outputs:
-notes:			According datasheet HD44780 table 12
-Version :    	DMK, Initial code
-*******************************************************************/
-void init_4bits_mode(void) {
+
+void init(void) {
 	// PORTC output mode and all low (also E and RS pin)
 	DDRC = 0xFF;
 	PORTC = 0x00;
@@ -67,33 +57,14 @@ void init_4bits_mode(void) {
 
 }
 
-/******************************************************************
-short:			Writes string to LCD at cursor position
-inputs:
-outputs:
-notes:			According datasheet HD44780 table 12
-Version :    	DMK, Initial code
-*******************************************************************/
-void lcd_write_string(char *str) {
-	// Het kan met een while:
 
-	// while(*str) {
-	// 	lcd_write_data(*str++);
-	// }
-
-	// of met een for:
+void display_text(char *str) {
 	for(;*str; str++){
 		lcd_write_data(*str);
 	}
 }
 
-/******************************************************************
-short:			Writes 8 bits DATA to lcd
-inputs:			byte - written to LCD
-outputs:
-notes:			According datasheet HD44780 table 12
-Version :    	DMK, Initial code
-*******************************************************************/
+
 void lcd_write_data(unsigned char byte) {
 	// First nibble.
 	PORTC = byte;
@@ -106,13 +77,7 @@ void lcd_write_data(unsigned char byte) {
 	lcd_strobe_lcd_e();
 }
 
-/******************************************************************
-short:			Writes 8 bits COMMAND to lcd
-inputs:			byte - written to LCD
-outputs:
-notes:			According datasheet HD44780 table 12
-Version :    	DMK, Initial code
-*******************************************************************/
+
 void lcd_write_command(unsigned char byte)
 
 {
@@ -127,12 +92,22 @@ void lcd_write_command(unsigned char byte)
 	lcd_strobe_lcd_e();
 }
 
-void init(void)
+void set_cursor(int position)
 {
-	init_4bits_mode();
-}
+	unsigned char address;
 
-void display_text(char *str) 
-{
-	lcd_write_string(*str);
+	if (position < 0 || position > 31) {
+		position = 0;
+	}
+
+	// Translate position to DDRAM address
+	if (position < 16) {
+		//(0x00 to 0x0F)
+		address = position;
+		} else {
+		//(0x40 to 0x4F)
+		address = 0x40 + (position - 16);
+	}
+
+	lcd_write_command(0x80 | address);
 }
