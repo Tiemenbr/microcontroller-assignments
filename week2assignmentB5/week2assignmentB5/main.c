@@ -27,6 +27,8 @@ int main(void)
 
     // Write sample string
     display_text("Yedi you are");
+	set_cursor(16);
+	display_text("Bottom text");
 
     // Loop forever
     while (1) {
