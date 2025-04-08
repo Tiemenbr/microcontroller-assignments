@@ -28,7 +28,7 @@ int ms = 0;
 int adcMinPassed = 0;
 int adcMaxPassed = 0;
 
-int leds[8] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+int leds[8] = {0x07, 0xE0, 0x07, 0xE0, 0x07, 0xE0, 0x07, 0xE0};
 int rowsDone[8] = {0,0,0,0,0,0,0,0};
 int gameDone = 0;
 
@@ -77,7 +77,7 @@ void rowChecks() {
 			continue;
 		}
 		
-		leds[row] = leds[row] == 0b10000000 ? 0x01 : leds[row] << 1;
+		leds[row] = ((leds[row] << 1) | (leds[row] >> 7)) & 0xFF;
 		setrow(row, leds[row]);
 		if (rand()%10 == 0)
 		{
@@ -178,6 +178,12 @@ int main( void )
 	sei();
 	adcInit();					// initialize ADC
 	init_ht16k33(); // Initialize HT16K33 matrix
+	
+	int row;
+	for (row = 0; row < 8; row++)
+	{
+		setrow(row, leds[row]);
+	}
 	
 	while (1)
 	{
