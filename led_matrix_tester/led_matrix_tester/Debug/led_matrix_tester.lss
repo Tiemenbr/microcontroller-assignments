@@ -1,0 +1,361 @@
+
+led_matrix_tester.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00800100  000001ee  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         0000019a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  000001ee  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000220  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  0000025c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000bde  00000000  00000000  000002b4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000008a9  00000000  00000000  00000e92  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000047f  00000000  00000000  0000173b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000a4  00000000  00000000  00001bbc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000004ad  00000000  00000000  00001c60  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000217  00000000  00000000  0000210d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000048  00000000  00000000  00002324  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	45 c0       	rjmp	.+138    	; 0x8c <__ctors_end>
+   2:	00 00       	nop
+   4:	4b c0       	rjmp	.+150    	; 0x9c <__bad_interrupt>
+   6:	00 00       	nop
+   8:	49 c0       	rjmp	.+146    	; 0x9c <__bad_interrupt>
+   a:	00 00       	nop
+   c:	47 c0       	rjmp	.+142    	; 0x9c <__bad_interrupt>
+   e:	00 00       	nop
+  10:	45 c0       	rjmp	.+138    	; 0x9c <__bad_interrupt>
+  12:	00 00       	nop
+  14:	43 c0       	rjmp	.+134    	; 0x9c <__bad_interrupt>
+  16:	00 00       	nop
+  18:	41 c0       	rjmp	.+130    	; 0x9c <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	3f c0       	rjmp	.+126    	; 0x9c <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	3d c0       	rjmp	.+122    	; 0x9c <__bad_interrupt>
+  22:	00 00       	nop
+  24:	3b c0       	rjmp	.+118    	; 0x9c <__bad_interrupt>
+  26:	00 00       	nop
+  28:	39 c0       	rjmp	.+114    	; 0x9c <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	37 c0       	rjmp	.+110    	; 0x9c <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	35 c0       	rjmp	.+106    	; 0x9c <__bad_interrupt>
+  32:	00 00       	nop
+  34:	33 c0       	rjmp	.+102    	; 0x9c <__bad_interrupt>
+  36:	00 00       	nop
+  38:	31 c0       	rjmp	.+98     	; 0x9c <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	2f c0       	rjmp	.+94     	; 0x9c <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	2d c0       	rjmp	.+90     	; 0x9c <__bad_interrupt>
+  42:	00 00       	nop
+  44:	2b c0       	rjmp	.+86     	; 0x9c <__bad_interrupt>
+  46:	00 00       	nop
+  48:	29 c0       	rjmp	.+82     	; 0x9c <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	27 c0       	rjmp	.+78     	; 0x9c <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	25 c0       	rjmp	.+74     	; 0x9c <__bad_interrupt>
+  52:	00 00       	nop
+  54:	23 c0       	rjmp	.+70     	; 0x9c <__bad_interrupt>
+  56:	00 00       	nop
+  58:	21 c0       	rjmp	.+66     	; 0x9c <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	1f c0       	rjmp	.+62     	; 0x9c <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	1d c0       	rjmp	.+58     	; 0x9c <__bad_interrupt>
+  62:	00 00       	nop
+  64:	1b c0       	rjmp	.+54     	; 0x9c <__bad_interrupt>
+  66:	00 00       	nop
+  68:	19 c0       	rjmp	.+50     	; 0x9c <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	17 c0       	rjmp	.+46     	; 0x9c <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	15 c0       	rjmp	.+42     	; 0x9c <__bad_interrupt>
+  72:	00 00       	nop
+  74:	13 c0       	rjmp	.+38     	; 0x9c <__bad_interrupt>
+  76:	00 00       	nop
+  78:	11 c0       	rjmp	.+34     	; 0x9c <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	0f c0       	rjmp	.+30     	; 0x9c <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	0d c0       	rjmp	.+26     	; 0x9c <__bad_interrupt>
+  82:	00 00       	nop
+  84:	0b c0       	rjmp	.+22     	; 0x9c <__bad_interrupt>
+  86:	00 00       	nop
+  88:	09 c0       	rjmp	.+18     	; 0x9c <__bad_interrupt>
+	...
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	79 d0       	rcall	.+242    	; 0x18c <main>
+  9a:	7d c0       	rjmp	.+250    	; 0x196 <_exit>
+
+0000009c <__bad_interrupt>:
+  9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
+
+0000009e <i2c_init>:
+// HT16K33 I2C address
+#define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
+
+void i2c_init(void) {
+	// Set SCL frequency
+	TWSR = 0x00; // Prescaler = 1
+  9e:	10 92 71 00 	sts	0x0071, r1	; 0x800071 <__TEXT_REGION_LENGTH__+0x7e0071>
+	TWBR = ((F_CPU / SCL_CLOCK) - 16) / 2;
+  a2:	80 e2       	ldi	r24, 0x20	; 32
+  a4:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <__TEXT_REGION_LENGTH__+0x7e0070>
+
+	// Enable TWI
+	TWCR = (1 << TWEN);
+  a8:	84 e0       	ldi	r24, 0x04	; 4
+  aa:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+  ae:	08 95       	ret
+
+000000b0 <i2c_start>:
+}
+
+void i2c_start(void) {
+	TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN); // Send START
+  b0:	84 ea       	ldi	r24, 0xA4	; 164
+  b2:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+	while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag
+  b6:	80 91 74 00 	lds	r24, 0x0074	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+  ba:	88 23       	and	r24, r24
+  bc:	e4 f7       	brge	.-8      	; 0xb6 <i2c_start+0x6>
+}
+  be:	08 95       	ret
+
+000000c0 <i2c_stop>:
+
+void i2c_stop(void) {
+	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO); // Send STOP
+  c0:	84 e9       	ldi	r24, 0x94	; 148
+  c2:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+	while (TWCR & (1 << TWSTO)); // Wait for STOP to complete
+  c6:	80 91 74 00 	lds	r24, 0x0074	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+  ca:	84 fd       	sbrc	r24, 4
+  cc:	fc cf       	rjmp	.-8      	; 0xc6 <i2c_stop+0x6>
+}
+  ce:	08 95       	ret
+
+000000d0 <i2c_write>:
+
+uint8_t i2c_write(uint8_t data) {
+	TWDR = data;
+  d0:	80 93 73 00 	sts	0x0073, r24	; 0x800073 <__TEXT_REGION_LENGTH__+0x7e0073>
+	TWCR = (1 << TWINT) | (1 << TWEN); // Start transmission
+  d4:	84 e8       	ldi	r24, 0x84	; 132
+  d6:	80 93 74 00 	sts	0x0074, r24	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+	while (!(TWCR & (1 << TWINT))); // Wait for complete
+  da:	80 91 74 00 	lds	r24, 0x0074	; 0x800074 <__TEXT_REGION_LENGTH__+0x7e0074>
+  de:	88 23       	and	r24, r24
+  e0:	e4 f7       	brge	.-8      	; 0xda <i2c_write+0xa>
+	return (TWSR & 0xF8); // Return status code
+  e2:	80 91 71 00 	lds	r24, 0x0071	; 0x800071 <__TEXT_REGION_LENGTH__+0x7e0071>
+}
+  e6:	88 7f       	andi	r24, 0xF8	; 248
+  e8:	08 95       	ret
+
+000000ea <ht16k33_init>:
+// HT16K33 I2C address
+#define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
+
+// Initialize the HT16K33 (turn on oscillator, enable display)
+void ht16k33_init(void) {
+	i2c_start();
+  ea:	e2 df       	rcall	.-60     	; 0xb0 <i2c_start>
+	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
+  ec:	88 ee       	ldi	r24, 0xE8	; 232
+  ee:	f0 df       	rcall	.-32     	; 0xd0 <i2c_write>
+	i2c_write(0x21); // Turn on oscillator
+  f0:	81 e2       	ldi	r24, 0x21	; 33
+  f2:	ee df       	rcall	.-36     	; 0xd0 <i2c_write>
+	i2c_stop();
+  f4:	e5 df       	rcall	.-54     	; 0xc0 <i2c_stop>
+  f6:	8f e1       	ldi	r24, 0x1F	; 31
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  f8:	9e e4       	ldi	r25, 0x4E	; 78
+  fa:	01 97       	sbiw	r24, 0x01	; 1
+  fc:	f1 f7       	brne	.-4      	; 0xfa <ht16k33_init+0x10>
+  fe:	00 c0       	rjmp	.+0      	; 0x100 <ht16k33_init+0x16>
+	_delay_ms(10);  // Small delay to ensure oscillator is enabled
+
+	i2c_start();
+ 100:	00 00       	nop
+	i2c_write((HT16K33_ADDR << 1) | 0);
+ 102:	d6 df       	rcall	.-84     	; 0xb0 <i2c_start>
+ 104:	88 ee       	ldi	r24, 0xE8	; 232
+ 106:	e4 df       	rcall	.-56     	; 0xd0 <i2c_write>
+	i2c_write(0x81); // Display on, no blink
+ 108:	81 e8       	ldi	r24, 0x81	; 129
+ 10a:	e2 df       	rcall	.-60     	; 0xd0 <i2c_write>
+ 10c:	d9 df       	rcall	.-78     	; 0xc0 <i2c_stop>
+	i2c_stop();
+ 10e:	8f e1       	ldi	r24, 0x1F	; 31
+ 110:	9e e4       	ldi	r25, 0x4E	; 78
+ 112:	01 97       	sbiw	r24, 0x01	; 1
+ 114:	f1 f7       	brne	.-4      	; 0x112 <ht16k33_init+0x28>
+	_delay_ms(10);  // Small delay for display to turn on
+
+	i2c_start();
+ 116:	00 c0       	rjmp	.+0      	; 0x118 <ht16k33_init+0x2e>
+ 118:	00 00       	nop
+	i2c_write((HT16K33_ADDR << 1) | 0);
+ 11a:	ca df       	rcall	.-108    	; 0xb0 <i2c_start>
+ 11c:	88 ee       	ldi	r24, 0xE8	; 232
+ 11e:	d8 df       	rcall	.-80     	; 0xd0 <i2c_write>
+	i2c_write(0xEF); // Brightness: max
+ 120:	8f ee       	ldi	r24, 0xEF	; 239
+ 122:	d6 df       	rcall	.-84     	; 0xd0 <i2c_write>
+ 124:	cd df       	rcall	.-102    	; 0xc0 <i2c_stop>
+	i2c_stop();
+ 126:	8f e1       	ldi	r24, 0x1F	; 31
+ 128:	9e e4       	ldi	r25, 0x4E	; 78
+ 12a:	01 97       	sbiw	r24, 0x01	; 1
+ 12c:	f1 f7       	brne	.-4      	; 0x12a <ht16k33_init+0x40>
+ 12e:	00 c0       	rjmp	.+0      	; 0x130 <ht16k33_init+0x46>
+ 130:	00 00       	nop
+ 132:	08 95       	ret
+
+00000134 <clear_matrix>:
+ 134:	cf 93       	push	r28
+ 136:	c0 e0       	ldi	r28, 0x00	; 0
+	_delay_ms(10);  // Small delay for brightness adjustment
+}
+
+// Function to clear the matrix (turn off all pixels)
+void clear_matrix(void) {
+	for (uint8_t col = 0; col < 8; col++) {
+ 138:	09 c0       	rjmp	.+18     	; 0x14c <clear_matrix+0x18>
+		i2c_start();
+ 13a:	ba df       	rcall	.-140    	; 0xb0 <i2c_start>
+		i2c_write((HT16K33_ADDR << 1) | 0); // Write mode
+ 13c:	88 ee       	ldi	r24, 0xE8	; 232
+ 13e:	c8 df       	rcall	.-112    	; 0xd0 <i2c_write>
+		i2c_write(col); // Column address (0 to 7)
+ 140:	8c 2f       	mov	r24, r28
+ 142:	c6 df       	rcall	.-116    	; 0xd0 <i2c_write>
+		i2c_write(0x00); // Clear the column (turn off all pixels)
+ 144:	80 e0       	ldi	r24, 0x00	; 0
+ 146:	c4 df       	rcall	.-120    	; 0xd0 <i2c_write>
+ 148:	bb df       	rcall	.-138    	; 0xc0 <i2c_stop>
+		i2c_stop();
+ 14a:	cf 5f       	subi	r28, 0xFF	; 255
+ 14c:	c8 30       	cpi	r28, 0x08	; 8
+	_delay_ms(10);  // Small delay for brightness adjustment
+}
+
+// Function to clear the matrix (turn off all pixels)
+void clear_matrix(void) {
+	for (uint8_t col = 0; col < 8; col++) {
+ 14e:	a8 f3       	brcs	.-22     	; 0x13a <clear_matrix+0x6>
+ 150:	8f e1       	ldi	r24, 0x1F	; 31
+ 152:	9e e4       	ldi	r25, 0x4E	; 78
+ 154:	01 97       	sbiw	r24, 0x01	; 1
+ 156:	f1 f7       	brne	.-4      	; 0x154 <clear_matrix+0x20>
+ 158:	00 c0       	rjmp	.+0      	; 0x15a <clear_matrix+0x26>
+ 15a:	00 00       	nop
+ 15c:	cf 91       	pop	r28
+ 15e:	08 95       	ret
+
+00000160 <set_bottom_rows>:
+		i2c_write(col); // Column address (0 to 7)
+		i2c_write(0x00); // Clear the column (turn off all pixels)
+		i2c_stop();
+	}
+	_delay_ms(10); // Wait to ensure the matrix is cleared
+}
+ 160:	cf 93       	push	r28
+ 162:	c4 e0       	ldi	r28, 0x04	; 4
+// Set the right-most pixel for rows 5, 6, 7, 8
+void set_bottom_rows(void) {
+	uint8_t pattern = 0x80;  // 0x80 turns on the right-most pixel (bit 7)
+
+	// Set pixels in rows 5, 6, 7, 8 (corresponds to row 4 to 7 in the matrix)
+	for (uint8_t row = 4; row < 8; row++) {
+ 164:	09 c0       	rjmp	.+18     	; 0x178 <set_bottom_rows+0x18>
+		i2c_start();
+ 166:	a4 df       	rcall	.-184    	; 0xb0 <i2c_start>
+		i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
+ 168:	88 ee       	ldi	r24, 0xE8	; 232
+ 16a:	b2 df       	rcall	.-156    	; 0xd0 <i2c_write>
+		i2c_write(row); // Row address (4 to 7 corresponding to rows 5 to 8)
+ 16c:	8c 2f       	mov	r24, r28
+ 16e:	b0 df       	rcall	.-160    	; 0xd0 <i2c_write>
+		i2c_write(pattern); // Set the right-most pixel (bit 7)
+ 170:	80 e8       	ldi	r24, 0x80	; 128
+ 172:	ae df       	rcall	.-164    	; 0xd0 <i2c_write>
+ 174:	a5 df       	rcall	.-182    	; 0xc0 <i2c_stop>
+		i2c_stop();
+ 176:	cf 5f       	subi	r28, 0xFF	; 255
+ 178:	c8 30       	cpi	r28, 0x08	; 8
+// Set the right-most pixel for rows 5, 6, 7, 8
+void set_bottom_rows(void) {
+	uint8_t pattern = 0x80;  // 0x80 turns on the right-most pixel (bit 7)
+
+	// Set pixels in rows 5, 6, 7, 8 (corresponds to row 4 to 7 in the matrix)
+	for (uint8_t row = 4; row < 8; row++) {
+ 17a:	a8 f3       	brcs	.-22     	; 0x166 <set_bottom_rows+0x6>
+ 17c:	8f e1       	ldi	r24, 0x1F	; 31
+ 17e:	9e e4       	ldi	r25, 0x4E	; 78
+ 180:	01 97       	sbiw	r24, 0x01	; 1
+ 182:	f1 f7       	brne	.-4      	; 0x180 <set_bottom_rows+0x20>
+ 184:	00 c0       	rjmp	.+0      	; 0x186 <set_bottom_rows+0x26>
+ 186:	00 00       	nop
+ 188:	cf 91       	pop	r28
+ 18a:	08 95       	ret
+
+0000018c <main>:
+		i2c_write(row); // Row address (4 to 7 corresponding to rows 5 to 8)
+		i2c_write(pattern); // Set the right-most pixel (bit 7)
+		i2c_stop();
+	}
+	_delay_ms(10); // Small delay to ensure the matrix is updated
+}
+ 18c:	88 df       	rcall	.-240    	; 0x9e <i2c_init>
+ 18e:	ad df       	rcall	.-166    	; 0xea <ht16k33_init>
+	// Initialize the system
+	i2c_init();    // Initialize I2C (TWI)
+	ht16k33_init(); // Initialize HT16K33 matrix
+
+	// Clear the matrix before displaying anything new
+	clear_matrix(); // Turn off all pixels
+ 190:	d1 df       	rcall	.-94     	; 0x134 <clear_matrix>
+ 192:	e6 df       	rcall	.-52     	; 0x160 <set_bottom_rows>
+
+	// Set the right-most pixel in rows 5, 6, 7, 8
+	set_bottom_rows();
+ 194:	ff cf       	rjmp	.-2      	; 0x194 <main+0x8>
+
+00000196 <_exit>:
+ 196:	f8 94       	cli
+
+00000198 <__stop_program>:
+ 198:	ff cf       	rjmp	.-2      	; 0x198 <__stop_program>
