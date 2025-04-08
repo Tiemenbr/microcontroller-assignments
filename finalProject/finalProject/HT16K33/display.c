@@ -2,7 +2,7 @@
  * display.c
  *
  * Created: 8-4-2025 11:22:40
- *  Author: tieme
+ * Author : Tiemen and Tom
  */ 
 #define F_CPU 8e6
 #include <avr/io.h>

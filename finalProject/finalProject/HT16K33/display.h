@@ -2,7 +2,7 @@
  * display.h
  *
  * Created: 8-4-2025 11:22:57
- *  Author: tieme
+ * Author : Tiemen and Tom
  */ 
 
 #include <avr/io.h>

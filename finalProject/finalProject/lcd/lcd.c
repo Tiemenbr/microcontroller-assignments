@@ -2,7 +2,7 @@
  * lcd.c
  *
  * Created: 14-2-2025 13:53:06
- *  Author: tieme
+ * Author : Tiemen and Tom
  */ 
 
 #define F_CPU 8e6

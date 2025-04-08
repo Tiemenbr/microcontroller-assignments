@@ -2,7 +2,7 @@
  * lcd.h
  *
  * Created: 14-2-2025 13:52:50
- *  Author: tieme
+ * Author : Tiemen and Tom
  */ 
 
 
