@@ -4,5 +4,7 @@
 
 HT16K33\display.c
 
+lcd\lcd.c
+
 main.c
 

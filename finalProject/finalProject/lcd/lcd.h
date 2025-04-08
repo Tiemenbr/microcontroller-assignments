@@ -9,7 +9,7 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-void init();
+void init_lcd();
 void display_text(char *str);
 void set_cursor(int position);
 

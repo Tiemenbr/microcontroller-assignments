@@ -17,6 +17,7 @@
 
 #include <avr/pgmspace.h>
 #include "HT16K33/display.h"
+#include "lcd/lcd.h"
 
 #define BIT(x)	(1 << (x))
 #define ADCMIN 16
@@ -29,6 +30,8 @@ int adcMinPassed = 0;
 int adcMaxPassed = 0;
 
 int leds[8] = {0x07, 0xE0, 0x07, 0xE0, 0x07, 0xE0, 0x07, 0xE0};
+//int leds[8] = {0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE}; //set for garenteed win
+
 int rowsDone[8] = {0,0,0,0,0,0,0,0};
 int gameDone = 0;
 
@@ -64,9 +67,6 @@ void timer2init()
 }
 
 void rowChecks() {
-	// per row check if done
-	// per row <<
-	// per row
 	int row;
 	int completed = 0;
 	for (row = 0; row < 8; row++)
@@ -90,7 +90,6 @@ void rowChecks() {
 	{
 		//game done
 		gameDone = 1;
-		
 		game = &non;
 	}
 }
@@ -111,7 +110,6 @@ void adcMin( void )
 {
 	if (adcMaxPassed)
 	{
-		PORTC = 1;
 		PORTD = mscount;
 		ms = mscount;
 		adcMaxPassed = 0;
@@ -125,7 +123,6 @@ void adcMax( void )
 {
 	if (adcMinPassed)
 	{
-		PORTC = 3;
 		PORTD = mscount;
 		ms = mscount;
 		adcMinPassed = 0;
@@ -159,7 +156,7 @@ ISR(TIMER2_COMP_vect)
 {
 	mscount++;
 	mscount2++;
-	if (mscount2 > (ms%90+10)) { 
+	if (mscount2 > 100) { 
 		game();
 		mscount2 = 0;
 	}
@@ -171,21 +168,38 @@ int main( void )
 	DDRF = 0x00;				// set PORTF for input (ADC)
 	DDRA = 0xFF;				// set PORTA for output 
 	DDRB = 0xFF;				// set PORTB for output
-	DDRC = 0xFF;				// set PORTC for output
 	DDRD = 0xFF;				// set PORTD for output
 	
 	timer2init();
 	sei();
 	adcInit();					// initialize ADC
-	init_ht16k33(); // Initialize HT16K33 matrix
+	init_lcd();					// Initialize lcd
+	init_ht16k33();				// Initialize HT16K33 matrix
 	
+	//set led matrix to show correct lights
 	int row;
 	for (row = 0; row < 8; row++)
 	{
 		setrow(row, leds[row]);
 	}
 	
+	//show play text on lcd
+	display_text("Play now!");
+	
 	while (1)
 	{
+		if (gameDone == 1)
+		{
+			//check if victory
+			if(leds[0] & leds[1] & leds[2] & leds[3] & leds[4] & leds[5] & leds[6] & leds[7])
+			{
+				//won
+				display_text("You won!");
+			} else {
+				//lost
+				display_text("oops try again");
+			}
+			gameDone = 0;
+		}
 	}
 }

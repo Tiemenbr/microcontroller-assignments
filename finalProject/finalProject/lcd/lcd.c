@@ -28,7 +28,7 @@ void lcd_strobe_lcd_e(void) {
 }
 
 
-void init(void) {
+void init_lcd(void) {
 	// PORTC output mode and all low (also E and RS pin)
 	DDRC = 0xFF;
 	PORTC = 0x00;
@@ -57,10 +57,17 @@ void init(void) {
 
 }
 
+void clear()
+{
+	lcd_write_command(0x01);
+	lcd_write_command(0x02);
+}
+
 
 void display_text(char *str) {
-	for(;*str; str++){
-		lcd_write_data(*str);
+	clear();
+	for (int i = 0; str[i] != '\0'; i++) {
+		lcd_write_data(str[i]);
 	}
 }
 
