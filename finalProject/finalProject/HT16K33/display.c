@@ -1,262 +1,111 @@
 /*
  * display.c
  *
- * Created: 1/16/2018 8:16:59 AM
- *  Author: Diederich Kroeske
+ * Created: 8-4-2025 11:22:40
+ *  Author: tieme
  */ 
 
 #include <avr/io.h>
+#include <util/delay.h>
 
-#include "display.h"
-#include "fonts.h"
 
-// HT16K33 routines
-void displayInitHT16K33(uint8_t i2c_address);
+// I2C setup functions (already defined in previous steps)
+void i2c_init(void);
+void i2c_start(void);
+void i2c_stop(void);
+uint8_t i2c_write(uint8_t data);
 
-// I2C routines
-void twi_init(void);
-void twi_start(void);
-void twi_stop(void);
-void twi_tx(unsigned char data);
 
-// I2C address of display
-#define D0_I2C_ADDR	0x74
+// HT16K33 I2C address
+#define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
+uint8_t display_buffer[16] = {0};  // Mirrors HT16K33's display RAM (16 bytes)
 
-// Display buffer in ATMEGA memory
-#define	width	8 * 1		// 1 displays width
-#define	height	8			// 1 display height
-uint8_t buf[width*height/8];
 
-/******************************************************************/
-void displayInit(void) 
-/*
-short:			Init display
-inputs:			
-outputs:		-
-notes:			Init display
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-	twi_init();							// Enable TWI interface
-	displayInitHT16K33(D0_I2C_ADDR);	// Iit display
+void i2c_init(void) {
+	// Set SCL frequency
+	TWSR = 0x00; // Prescaler = 1
+	TWBR = ((F_CPU / SCL_CLOCK) - 16) / 2;
+
+	// Enable TWI
+	TWCR = (1 << TWEN);
 }
 
-/******************************************************************/
-void displayInitHT16K33(uint8_t i2c_address) 
-/*
-short:
-inputs:
-outputs:
-notes:
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-	// System setup page 30 ht16k33 datasheet
-	twi_start();
-	twi_tx(i2c_address);	// Display I2C addres + R/W bit
-	twi_tx(0x21);	// Internal osc on (page 10 HT16K33)
-	twi_stop();
-		
-	// ROW/INT set. Page 31 ht16k33 datasheet
-	twi_start();
-	twi_tx(i2c_address);	// Display I2C address + R/W bit
-	twi_tx(0xA0);	// HT16K33 pins all output (default)
-	twi_stop();
-
-	// Dimming set
-	twi_start();
-	twi_tx(i2c_address);	// Display I2C address + R/W bit
-	twi_tx(0xE1);	// Display Dimming 2/16 duty cycle
-	twi_stop();
-
-	// Display set
-	twi_start();
-	twi_tx(i2c_address);	// Display I2C address + R/W bit
-	twi_tx(0x81);			// Display ON, Blinking OFF
-	twi_stop();
-	
-	// Beeld een patroon af op display (test)
-	twi_start();
-	twi_tx(i2c_address);
-	twi_tx(0x00);
-	uint8_t a = 0x55;
-	for( uint8_t idx = 0; idx < 8; idx++ ) {
-		a ^= 0xFF;
-		uint8_t data = (a >> 1) | ((a<<7) & 0x80);
-		twi_tx( data);
-		twi_tx( 0x00);
-	}
-	twi_stop();
+void i2c_start(void) {
+	TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN); // Send START
+	while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag
 }
 
-/******************************************************************/
-void displaySetPixel(uint8_t x, uint8_t y)
-/*
-short:			
-inputs:			
-outputs:		
-notes:			
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-	if (x >= width || y >= height) {
-		return;
-	}
-	buf[y] |= (1 << x);
+void i2c_stop(void) {
+	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO); // Send STOP
+	while (TWCR & (1 << TWSTO)); // Wait for STOP to complete
 }
 
-/******************************************************************/
-void displayClrPixel(uint8_t x, uint8_t y)
-/*
-short:
-inputs:
-outputs:
-notes:
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-}
-
-/******************************************************************/
-void display()
-/*
-short:		Write buffer to display
-inputs:
-outputs:
-notes:		Let op de 'vreemde' shift, foutje in printplaat?
-Version:	DMK, Initial code
-*******************************************************************/
-{
-	// Second display
-	twi_start();
-	twi_tx(D0_I2C_ADDR);
-	twi_tx(0x00);
-	for( uint8_t idx = 0; idx < 8; idx++ ) {
-		uint8_t a = buf[7 + 0 * 8 - idx];
-		uint8_t data = (a >> 1) | ((a<<7) & 0x80);
-		twi_tx( data);
-		twi_tx( 0x00);
-	}
-	twi_stop();
-}
-
-/******************************************************************/
-void displayRotl(void)
-/*
-short:		Rotate buffer to the left
-inputs:
-outputs:
-notes:
-Version:	DMK, Initial code
-*******************************************************************/
-{
-}
-
-/******************************************************************/
-void displayRotr(void)
-/*
-short:		Rotate buffer to the right
-inputs:
-outputs:
-notes:
-Version:	DMK, Initial code
-*******************************************************************/
-{
-}
-
-/******************************************************************/
-void displayClr(void)
-/*
-short:		Clear display
-inputs:
-outputs:
-notes:
-Version:	DMK, Initial code
-*******************************************************************/
-{
-	for( uint8_t idx = 0; idx < width - 1; idx++) {
-		buf[idx] = 0;
-	}
-}
-
-
-/******************************************************************/
-void displayChar(char ch, uint8_t x, uint8_t y)
-/*
-short:		Print character op display
-inputs:
-outputs:
-notes:
-Version:	DMK, Initial code
-*******************************************************************/
-{	
-}
-
-/******************************************************************/
-void displayString(char *str, uint8_t x, uint8_t y)
-/*
-short:		Print string op display
-inputs:
-outputs:
-notes:		Maakt gebruik van displayChar(..)
-Version:	DMK, Initial code
-*******************************************************************/
-{
-}
-
-
-/******************************************************************/
-void twi_init(void)
-/*
-short:			Init AVR TWI interface and set bitrate
-inputs:
-outputs:
-notes:			TWI clock is set to 100 kHz
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-	TWSR = 0;
-	TWBR = 32;	 // TWI clock set to 100kHz, prescaler = 0
-}
-
-/******************************************************************/
-void twi_start(void)
-/*
-short:			Generate TWI start condition
-inputs:
-outputs:
-notes:
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-	TWCR = (0x80 | 0x20 | 0x04);
-	while( 0x00 == (TWCR & 0x80) );
-}
-
-/******************************************************************/
-void twi_stop(void)
-/*
-short:			Generate TWI stop condition
-inputs:
-outputs:
-notes:
-Version :    	DMK, Initial code
-*******************************************************************/
-{
-	TWCR = (0x80 | 0x10 | 0x04);
-}
-
-/******************************************************************/
-void twi_tx(unsigned char data)
-/*
-short:			transmit 8 bits data
-inputs:
-outputs:
-notes:
-Version :    	DMK, Initial code
-*******************************************************************/
-{
+uint8_t i2c_write(uint8_t data) {
 	TWDR = data;
-	TWCR = (0x80 | 0x04);
-	while( 0 == (TWCR & 0x80) );
+	TWCR = (1 << TWINT) | (1 << TWEN); // Start transmission
+	while (!(TWCR & (1 << TWINT))); // Wait for complete
+	return (TWSR & 0xF8); // Return status code
+}
+
+// HT16K33 I2C address
+#define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
+
+// Initialize the HT16K33 (turn on oscillator, enable display)
+void ht16k33_init(void) {
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
+	i2c_write(0x21); // Turn on oscillator
+	i2c_stop();
+	_delay_ms(10);  // Small delay to ensure oscillator is enabled
+	
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
+	i2c_write(0xA0); // HT16K33 pins all output (default)
+	i2c_stop();
+	_delay_ms(10);
+
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);
+	i2c_write(0x81); // Display on, no blink
+	i2c_stop();
+	_delay_ms(10);  // Small delay for display to turn on
+
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);
+	i2c_write(0xEF); // Brightness: max
+	i2c_stop();
+	_delay_ms(10);  // Small delay for brightness adjustment
+}
+
+// Function to clear the matrix (turn off all pixels)
+void clear_matrix(void) {
+	for (uint8_t col = 0; col < 8; col++) {
+		uint8_t addr = col * 2;
+		display_buffer[addr] = 0x00;
+
+		i2c_start();
+		i2c_write((HT16K33_ADDR << 1) | 0);
+		i2c_write(addr);
+		i2c_write(0x00);
+		i2c_stop();
+	}
+}
+
+void set_pixel(uint8_t row, uint8_t col, uint8_t on) {
+	if (row > 7 || col > 7) return; // Bounds check
+
+	uint8_t addr = col * 2;               // Even addresses: 0x00, 0x02, ..., 0x0E
+	uint8_t bit = (1 << row);             // Each bit is one row
+
+	if (on)
+	display_buffer[addr] |= bit;
+	else
+	display_buffer[addr] &= ~bit;
+
+	// Send to display
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);
+	i2c_write(addr);
+	i2c_write(display_buffer[addr]);
+	i2c_stop();
 }

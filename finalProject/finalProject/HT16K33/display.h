@@ -1,27 +1,18 @@
 /*
  * display.h
  *
- * Created: 1/16/2018 8:17:18 AM
- *  Author: Gebruiker
+ * Created: 8-4-2025 11:22:57
+ *  Author: tieme
  */ 
 
 
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
-void displayInit(void);
-void displaySetPixel(uint8_t x, uint8_t y);
-void displayClrPixel(uint8_t x, uint8_t y);
-void displayChar(char ch, uint8_t x, uint8_t y);
-void displayString(char *str, uint8_t x, uint8_t y);
-void displayRotl(void);
-void displayRotr(void);
-void displayClr(void);
 
-void display(void);
-
-
-
+void ht16k33_init(void);
+void clear_matrix(void);
+void set_pixel(uint8_t row, uint8_t col, uint8_t on);
 
 
 #endif /* DISPLAY_H_ */
