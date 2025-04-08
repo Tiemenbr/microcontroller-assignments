@@ -26,17 +26,18 @@
 int mscount = 0;
 int mscount2 = 0;
 int ms = 0;
+int timerTreshold = 100;
 int adcMinPassed = 0;
 int adcMaxPassed = 0;
 
-int leds[8] = {0x07, 0xE0, 0x07, 0xE0, 0x07, 0xE0, 0x07, 0xE0};
+int leds[8] = {0x0F, 0xF0, 0x0F, 0xF0, 0x0F, 0xF0, 0x0F, 0xF0};
 //int leds[8] = {0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE}; //set for garenteed win
 
 int rowsDone[8] = {0,0,0,0,0,0,0,0};
 int gameDone = 0;
 
 void non (void) {
-	
+	//emtpy function to do nothing while ADC is running
 }
 
 void (*game)() = &non;
@@ -66,6 +67,7 @@ void timer2init()
 	TIMSK |= (1<<7);
 }
 
+//game logic that runs when handle has been pulled.
 void rowChecks() {
 	int row;
 	int completed = 0;
@@ -79,11 +81,12 @@ void rowChecks() {
 		
 		leds[row] = ((leds[row] << 1) | (leds[row] >> 7)) & 0xFF;
 		setrow(row, leds[row]);
+		
+		//random chance to stop the bit shifting.
 		if (rand()%10 == 0)
 		{
 			rowsDone[row] = 1;
 		}
-		// random functie to disable
 	}
 	
 	if (completed == 8)
@@ -98,6 +101,7 @@ void rowChecks() {
 void slotGame (void)
 {
 	mscount2 = 0;
+	timerTreshold = (ms / 5 > 150) ? 150 : ms / 5;
 	int row;
 	for (row = 0; row < 8; row++)
 	{
@@ -110,7 +114,6 @@ void adcMin( void )
 {
 	if (adcMaxPassed)
 	{
-		PORTD = mscount;
 		ms = mscount;
 		adcMaxPassed = 0;
 		slotGame();
@@ -123,7 +126,6 @@ void adcMax( void )
 {
 	if (adcMinPassed)
 	{
-		PORTD = mscount;
 		ms = mscount;
 		adcMinPassed = 0;
 		slotGame();
@@ -136,9 +138,6 @@ ISR (ADC_vect)
 {
 	int l = ADCL;
 	int h = ADCH;
-
-	PORTB = l;			// Show MSB/LSB (bit 10:0) of ADC
-	PORTA = h;
 	
 	
 	int adcOut = (h << 2) | l;
@@ -156,7 +155,7 @@ ISR(TIMER2_COMP_vect)
 {
 	mscount++;
 	mscount2++;
-	if (mscount2 > 100) { 
+	if (mscount2 > timerTreshold) { 
 		game();
 		mscount2 = 0;
 	}
@@ -166,9 +165,6 @@ ISR(TIMER2_COMP_vect)
 int main( void )
 {
 	DDRF = 0x00;				// set PORTF for input (ADC)
-	DDRA = 0xFF;				// set PORTA for output 
-	DDRB = 0xFF;				// set PORTB for output
-	DDRD = 0xFF;				// set PORTD for output
 	
 	timer2init();
 	sei();
