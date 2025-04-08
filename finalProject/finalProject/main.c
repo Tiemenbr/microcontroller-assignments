@@ -12,6 +12,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <stdlib.h>
+
 
 #include <avr/pgmspace.h>
 #include "HT16K33/display.h"
@@ -21,8 +23,21 @@
 #define ADCMAX 959
 
 int mscount = 0;
+int mscount2 = 0;
+int ms = 0;
 int adcMinPassed = 0;
 int adcMaxPassed = 0;
+
+int leds[8] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+int rowsDone[8] = {0,0,0,0,0,0,0,0};
+int gameDone = 0;
+
+void non (void) {
+	
+}
+
+void (*game)() = &non;
+
 
 // wait(): busy waiting for 'ms' millisecond
 // Used library: util/delay.h
@@ -48,6 +63,49 @@ void timer2init()
 	TIMSK |= (1<<7);
 }
 
+void rowChecks() {
+	// per row check if done
+	// per row <<
+	// per row
+	int row;
+	int completed = 0;
+	for (row = 0; row < 8; row++)
+	{
+		if (rowsDone[row])
+		{
+			completed++;
+			continue;
+		}
+		
+		leds[row] = leds[row] == 0b10000000 ? 0x01 : leds[row] << 1;
+		setrow(row, leds[row]);
+		if (rand()%10 == 0)
+		{
+			rowsDone[row] = 1;
+		}
+		// random functie to disable
+	}
+	
+	if (completed == 8)
+	{
+		//game done
+		gameDone = 1;
+		
+		game = &non;
+	}
+}
+
+
+void slotGame (void)
+{
+	mscount2 = 0;
+	int row;
+	for (row = 0; row < 8; row++)
+	{
+		rowsDone[row] = 0;
+	}
+	game = &rowChecks;
+}
 
 void adcMin( void )
 {
@@ -55,7 +113,9 @@ void adcMin( void )
 	{
 		PORTC = 1;
 		PORTD = mscount;
+		ms = mscount;
 		adcMaxPassed = 0;
+		slotGame();
 	}
 	adcMinPassed = 1;
 	mscount = 0;
@@ -67,7 +127,9 @@ void adcMax( void )
 	{
 		PORTC = 3;
 		PORTD = mscount;
+		ms = mscount;
 		adcMinPassed = 0;
+		slotGame();
 	}
 	adcMaxPassed = 1;
 	mscount = 0;
@@ -96,12 +158,16 @@ ISR (ADC_vect)
 ISR(TIMER2_COMP_vect)
 {
 	mscount++;
+	mscount2++;
+	if (mscount2 > (ms%90+10)) { 
+		game();
+		mscount2 = 0;
+	}
 }
 
 // Main program: ADC at PF1
 int main( void )
 {
-	/*
 	DDRF = 0x00;				// set PORTF for input (ADC)
 	DDRA = 0xFF;				// set PORTA for output 
 	DDRB = 0xFF;				// set PORTB for output
@@ -111,20 +177,9 @@ int main( void )
 	timer2init();
 	sei();
 	adcInit();					// initialize ADC
-	*/
-	
 	init_ht16k33(); // Initialize HT16K33 matrix
 	
-	//testcode
-	int val = 0x01;
 	while (1)
 	{
-		val = val << 1;
-		if (val == 0b100000000)
-		{
-			val = 0x01;
-		}
-		setrow(0, val);
-		_delay_ms(100);
 	}
 }
