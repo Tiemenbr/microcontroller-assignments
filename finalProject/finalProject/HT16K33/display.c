@@ -4,7 +4,8 @@
  * Created: 8-4-2025 11:22:40
  *  Author: tieme
  */ 
-
+#define F_CPU 8e6
+#define SCL_CLOCK 100000L // 100kHz I2C speed
 #include <avr/io.h>
 #include <util/delay.h>
 

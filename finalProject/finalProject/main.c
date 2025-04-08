@@ -8,6 +8,7 @@
 
 #define F_CPU 8e6
 #define SCL_CLOCK 100000L // 100kHz I2C speed
+#include "HT16K33/display.h"
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -100,6 +101,7 @@ ISR(TIMER2_COMP_vect)
 // Main program: ADC at PF1
 int main( void )
 {
+	/*
 	DDRF = 0x00;				// set PORTF for input (ADC)
 	DDRA = 0xFF;				// set PORTA for output 
 	DDRB = 0xFF;				// set PORTB for output
@@ -109,7 +111,17 @@ int main( void )
 	timer2init();
 	sei();
 	adcInit();					// initialize ADC
+	*/
+	i2c_init();    // Initialize I2C (TWI)
+	ht16k33_init(); // Initialize HT16K33 matrix
 
+	// Clear the matrix before displaying anything new
+	clear_matrix(); // Turn off all pixels
+	int i;
+	for (i = 0; i < 8; i++) {
+		set_pixel(i,i,1);
+	}
+	
 	while (1)
 	{
 		
