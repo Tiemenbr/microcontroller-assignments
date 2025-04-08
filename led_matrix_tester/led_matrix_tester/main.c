@@ -49,6 +49,12 @@ void ht16k33_init(void) {
 	i2c_write(0x21); // Turn on oscillator
 	i2c_stop();
 	_delay_ms(10);  // Small delay to ensure oscillator is enabled
+	
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
+	i2c_write(0xA0); // HT16K33 pins all output (default)
+	i2c_stop();
+	_delay_ms(10);
 
 	i2c_start();
 	i2c_write((HT16K33_ADDR << 1) | 0);
@@ -65,6 +71,7 @@ void ht16k33_init(void) {
 
 // Function to clear the matrix (turn off all pixels)
 void clear_matrix(void) {
+	/*
 	for (uint8_t col = 0; col < 8; col++) {
 		i2c_start();
 		i2c_write((HT16K33_ADDR << 1) | 0); // Write mode
@@ -73,11 +80,21 @@ void clear_matrix(void) {
 		i2c_stop();
 	}
 	_delay_ms(10); // Wait to ensure the matrix is cleared
+	*/
+	for (uint8_t addr = 0x00; addr <= 0x0F; addr++) {
+		i2c_start();
+		i2c_write((HT16K33_ADDR << 1) | 0); // Write mode
+		i2c_write(addr); // HT16K33 RAM address (0x00 to 0x0F)
+		i2c_write(0x00); // Clear all bits in this address
+		i2c_stop();
+	}
+	_delay_ms(10); // Give time to update
 }
 
 // Set the right-most pixel for rows 5, 6, 7, 8
 void set_bottom_rows(void) {
-	uint8_t pattern = 0x80;  // 0x80 turns on the right-most pixel (bit 7)
+	/*
+	uint8_t pattern = 64;  // 0x80 turns on the right-most pixel (bit 7)
 
 	// Set pixels in rows 5, 6, 7, 8 (corresponds to row 4 to 7 in the matrix)
 	for (uint8_t row = 4; row < 8; row++) {
@@ -87,7 +104,30 @@ void set_bottom_rows(void) {
 		i2c_write(pattern); // Set the right-most pixel (bit 7)
 		i2c_stop();
 	}
-	_delay_ms(10); // Small delay to ensure the matrix is updated
+	*/
+	uint8_t addr_even = 0x0E; // Column 7, even rows
+	uint8_t addr_odd  = 0x0F; // Column 7, odd rows
+
+	// Turn on bits for rows 4–7
+	// Row 4 = bit 4
+	// Row 5 = bit 5
+	// Row 6 = bit 6
+	// Row 7 = bit 7
+	uint8_t pattern = 0b11110000; // = 0xF0
+
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);
+	i2c_write(addr_even);
+	i2c_write(pattern); // Set even row bits (4 and 6)
+	i2c_stop();
+
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);
+	i2c_write(addr_odd);
+	i2c_write(pattern); // Set odd row bits (5 and 7)
+	i2c_stop();
+
+	_delay_ms(10);
 }
 
 int main(void) {
