@@ -112,18 +112,19 @@ int main( void )
 	sei();
 	adcInit();					// initialize ADC
 	*/
-	i2c_init();    // Initialize I2C (TWI)
-	ht16k33_init(); // Initialize HT16K33 matrix
-
-	// Clear the matrix before displaying anything new
-	clear_matrix(); // Turn off all pixels
-	int i;
-	for (i = 0; i < 8; i++) {
-		set_pixel(i,i,1);
-	}
 	
+	init_ht16k33(); // Initialize HT16K33 matrix
+	
+	//testcode
+	int val = 0x01;
 	while (1)
 	{
-		
+		val = val << 1;
+		if (val == 0b100000000)
+		{
+			val = 0x01;
+		}
+		setrow(0, val);
+		_delay_ms(100);
 	}
 }

@@ -10,10 +10,11 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
-void i2c_init(void);
-void ht16k33_init(void);
+//set up I2C and display.
+void init_ht16k33(void);
+
 void clear_matrix(void);
-void set_pixel(uint8_t row, uint8_t col, uint8_t on);
 
+void setrow(int row, int vallue);
 
-#endif /* DISPLAY_H_ */
+#endif

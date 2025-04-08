@@ -3,31 +3,31 @@ finalProject.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000326  2**0
+  0 .data         00000000  00800100  00800100  0000039a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000002b2  00000000  00000000  00000074  2**1
+  1 .text         00000326  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000016  00800100  00800100  00000326  2**0
+  2 .bss          00000006  00800100  00800100  0000039a  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000326  2**0
+  3 .comment      00000030  00000000  00000000  0000039a  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000358  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000003cc  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000a8  00000000  00000000  00000394  2**0
+  5 .debug_aranges 000000b0  00000000  00000000  00000408  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000e94  00000000  00000000  0000043c  2**0
+  6 .debug_info   00000fa8  00000000  00000000  000004b8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000a37  00000000  00000000  000012d0  2**0
+  7 .debug_abbrev 00000a7e  00000000  00000000  00001460  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000713  00000000  00000000  00001d07  2**0
+  8 .debug_line   00000758  00000000  00000000  00001ede  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000188  00000000  00000000  0000241c  2**2
+  9 .debug_frame  000001bc  00000000  00000000  00002638  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004f2  00000000  00000000  000025a4  2**0
+ 10 .debug_str    0000052f  00000000  00000000  000027f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000476  00000000  00000000  00002a96  2**0
+ 11 .debug_loc    00000566  00000000  00000000  00002d23  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000088  00000000  00000000  00002f0c  2**0
+ 12 .debug_ranges 00000090  00000000  00000000  00003289  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -51,7 +51,7 @@ Disassembly of section .text:
   1e:	00 00       	nop
   20:	45 c0       	rjmp	.+138    	; 0xac <__bad_interrupt>
   22:	00 00       	nop
-  24:	22 c1       	rjmp	.+580    	; 0x26a <__vector_9>
+  24:	4e c1       	rjmp	.+668    	; 0x2c2 <__vector_9>
   26:	00 00       	nop
   28:	41 c0       	rjmp	.+130    	; 0xac <__bad_interrupt>
   2a:	00 00       	nop
@@ -75,7 +75,7 @@ Disassembly of section .text:
   4e:	00 00       	nop
   50:	2d c0       	rjmp	.+90     	; 0xac <__bad_interrupt>
   52:	00 00       	nop
-  54:	d0 c0       	rjmp	.+416    	; 0x1f6 <__vector_21>
+  54:	fc c0       	rjmp	.+504    	; 0x24e <__vector_21>
   56:	00 00       	nop
   58:	29 c0       	rjmp	.+82     	; 0xac <__bad_interrupt>
   5a:	00 00       	nop
@@ -122,18 +122,18 @@ Disassembly of section .text:
   a0:	1d 92       	st	X+, r1
 
 000000a2 <.do_clear_bss_start>:
-  a2:	a6 31       	cpi	r26, 0x16	; 22
+  a2:	a6 30       	cpi	r26, 0x06	; 6
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
-  a8:	f7 d0       	rcall	.+494    	; 0x298 <main>
-  aa:	01 c1       	rjmp	.+514    	; 0x2ae <_exit>
+  a8:	23 d1       	rcall	.+582    	; 0x2f0 <main>
+  aa:	3b c1       	rjmp	.+630    	; 0x322 <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
 
 000000ae <i2c_init>:
-uint8_t display_buffer[16] = {0};  // Mirrors HT16K33's display RAM (16 bytes)
-
+// HT16K33 I2C address
+#define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
 
 void i2c_init(void) {
 	// Set SCL frequency
@@ -194,340 +194,425 @@ uint8_t i2c_write(uint8_t data) {
   f6:	88 7f       	andi	r24, 0xF8	; 248
   f8:	08 95       	ret
 
-000000fa <ht16k33_init>:
-// HT16K33 I2C address
-#define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
+000000fa <clear_matrix>:
+	
+	clear_matrix();
+}
 
-// Initialize the HT16K33 (turn on oscillator, enable display)
-void ht16k33_init(void) {
-	i2c_start();
-  fa:	e2 df       	rcall	.-60     	; 0xc0 <i2c_start>
-	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
-  fc:	88 ee       	ldi	r24, 0xE8	; 232
-  fe:	f0 df       	rcall	.-32     	; 0xe0 <i2c_write>
-	i2c_write(0x21); // Turn on oscillator
- 100:	81 e2       	ldi	r24, 0x21	; 33
- 102:	ee df       	rcall	.-36     	; 0xe0 <i2c_write>
-	i2c_stop();
- 104:	e5 df       	rcall	.-54     	; 0xd0 <i2c_stop>
- 106:	8f e1       	ldi	r24, 0x1F	; 31
+// Function to clear the matrix (turn off all pixels)
+void clear_matrix(void) {
+  fa:	0f 93       	push	r16
+  fc:	1f 93       	push	r17
+  fe:	cf 93       	push	r28
+ 100:	df 93       	push	r29
+	for (int col = 0; col < 8; col++) {
+ 102:	c0 e0       	ldi	r28, 0x00	; 0
+ 104:	d0 e0       	ldi	r29, 0x00	; 0
+ 106:	0c c0       	rjmp	.+24     	; 0x120 <clear_matrix+0x26>
+		int addr = col * 2;
+ 108:	8e 01       	movw	r16, r28
+ 10a:	00 0f       	add	r16, r16
+ 10c:	11 1f       	adc	r17, r17
+
+		i2c_start();
+ 10e:	d8 df       	rcall	.-80     	; 0xc0 <i2c_start>
+		i2c_write((HT16K33_ADDR << 1) | 0);
+ 110:	88 ee       	ldi	r24, 0xE8	; 232
+ 112:	e6 df       	rcall	.-52     	; 0xe0 <i2c_write>
+		i2c_write(addr);
+ 114:	80 2f       	mov	r24, r16
+ 116:	e4 df       	rcall	.-56     	; 0xe0 <i2c_write>
+		i2c_write(0x00);
+ 118:	80 e0       	ldi	r24, 0x00	; 0
+ 11a:	e2 df       	rcall	.-60     	; 0xe0 <i2c_write>
+ 11c:	d9 df       	rcall	.-78     	; 0xd0 <i2c_stop>
+		i2c_stop();
+ 11e:	21 96       	adiw	r28, 0x01	; 1
+ 120:	c8 30       	cpi	r28, 0x08	; 8
+	clear_matrix();
+}
+
+// Function to clear the matrix (turn off all pixels)
+void clear_matrix(void) {
+	for (int col = 0; col < 8; col++) {
+ 122:	d1 05       	cpc	r29, r1
+ 124:	8c f3       	brlt	.-30     	; 0x108 <clear_matrix+0xe>
+ 126:	df 91       	pop	r29
+ 128:	cf 91       	pop	r28
+		i2c_write((HT16K33_ADDR << 1) | 0);
+		i2c_write(addr);
+		i2c_write(0x00);
+		i2c_stop();
+	}
+}
+ 12a:	1f 91       	pop	r17
+ 12c:	0f 91       	pop	r16
+ 12e:	08 95       	ret
+
+00000130 <init_ht16k33>:
+ 130:	be df       	rcall	.-132    	; 0xae <i2c_init>
+ 132:	8f e1       	ldi	r24, 0x1F	; 31
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 108:	9e e4       	ldi	r25, 0x4E	; 78
- 10a:	01 97       	sbiw	r24, 0x01	; 1
- 10c:	f1 f7       	brne	.-4      	; 0x10a <ht16k33_init+0x10>
- 10e:	00 c0       	rjmp	.+0      	; 0x110 <ht16k33_init+0x16>
+ 134:	9e e4       	ldi	r25, 0x4E	; 78
+ 136:	01 97       	sbiw	r24, 0x01	; 1
+ 138:	f1 f7       	brne	.-4      	; 0x136 <init_ht16k33+0x6>
+ 13a:	00 c0       	rjmp	.+0      	; 0x13c <init_ht16k33+0xc>
+
+void init_ht16k33(void) {
+	i2c_init();
+	_delay_ms(10);  // Small delay to ensure i2c is enabled
+	
+	i2c_start();
+ 13c:	00 00       	nop
+	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
+ 13e:	c0 df       	rcall	.-128    	; 0xc0 <i2c_start>
+ 140:	88 ee       	ldi	r24, 0xE8	; 232
+	i2c_write(0x21); // Turn on oscillator
+ 142:	ce df       	rcall	.-100    	; 0xe0 <i2c_write>
+ 144:	81 e2       	ldi	r24, 0x21	; 33
+ 146:	cc df       	rcall	.-104    	; 0xe0 <i2c_write>
+	i2c_stop();
+ 148:	c3 df       	rcall	.-122    	; 0xd0 <i2c_stop>
+ 14a:	8f e1       	ldi	r24, 0x1F	; 31
+ 14c:	9e e4       	ldi	r25, 0x4E	; 78
+ 14e:	01 97       	sbiw	r24, 0x01	; 1
+ 150:	f1 f7       	brne	.-4      	; 0x14e <init_ht16k33+0x1e>
+ 152:	00 c0       	rjmp	.+0      	; 0x154 <init_ht16k33+0x24>
 	_delay_ms(10);  // Small delay to ensure oscillator is enabled
 	
 	i2c_start();
- 110:	00 00       	nop
+ 154:	00 00       	nop
 	i2c_write((HT16K33_ADDR << 1) | 0);  // Write mode
- 112:	d6 df       	rcall	.-84     	; 0xc0 <i2c_start>
- 114:	88 ee       	ldi	r24, 0xE8	; 232
- 116:	e4 df       	rcall	.-56     	; 0xe0 <i2c_write>
+ 156:	b4 df       	rcall	.-152    	; 0xc0 <i2c_start>
+ 158:	88 ee       	ldi	r24, 0xE8	; 232
+ 15a:	c2 df       	rcall	.-124    	; 0xe0 <i2c_write>
 	i2c_write(0xA0); // HT16K33 pins all output (default)
- 118:	80 ea       	ldi	r24, 0xA0	; 160
- 11a:	e2 df       	rcall	.-60     	; 0xe0 <i2c_write>
- 11c:	d9 df       	rcall	.-78     	; 0xd0 <i2c_stop>
+ 15c:	80 ea       	ldi	r24, 0xA0	; 160
+ 15e:	c0 df       	rcall	.-128    	; 0xe0 <i2c_write>
 	i2c_stop();
- 11e:	8f e1       	ldi	r24, 0x1F	; 31
- 120:	9e e4       	ldi	r25, 0x4E	; 78
- 122:	01 97       	sbiw	r24, 0x01	; 1
- 124:	f1 f7       	brne	.-4      	; 0x122 <ht16k33_init+0x28>
+ 160:	b7 df       	rcall	.-146    	; 0xd0 <i2c_stop>
+ 162:	8f e1       	ldi	r24, 0x1F	; 31
+ 164:	9e e4       	ldi	r25, 0x4E	; 78
+ 166:	01 97       	sbiw	r24, 0x01	; 1
+ 168:	f1 f7       	brne	.-4      	; 0x166 <init_ht16k33+0x36>
 	_delay_ms(10);
 
 	i2c_start();
- 126:	00 c0       	rjmp	.+0      	; 0x128 <ht16k33_init+0x2e>
- 128:	00 00       	nop
+ 16a:	00 c0       	rjmp	.+0      	; 0x16c <init_ht16k33+0x3c>
+ 16c:	00 00       	nop
 	i2c_write((HT16K33_ADDR << 1) | 0);
- 12a:	ca df       	rcall	.-108    	; 0xc0 <i2c_start>
- 12c:	88 ee       	ldi	r24, 0xE8	; 232
+ 16e:	a8 df       	rcall	.-176    	; 0xc0 <i2c_start>
+ 170:	88 ee       	ldi	r24, 0xE8	; 232
 	i2c_write(0x81); // Display on, no blink
- 12e:	d8 df       	rcall	.-80     	; 0xe0 <i2c_write>
- 130:	81 e8       	ldi	r24, 0x81	; 129
+ 172:	b6 df       	rcall	.-148    	; 0xe0 <i2c_write>
+ 174:	81 e8       	ldi	r24, 0x81	; 129
 	i2c_stop();
- 132:	d6 df       	rcall	.-84     	; 0xe0 <i2c_write>
- 134:	cd df       	rcall	.-102    	; 0xd0 <i2c_stop>
- 136:	8f e1       	ldi	r24, 0x1F	; 31
- 138:	9e e4       	ldi	r25, 0x4E	; 78
- 13a:	01 97       	sbiw	r24, 0x01	; 1
- 13c:	f1 f7       	brne	.-4      	; 0x13a <ht16k33_init+0x40>
- 13e:	00 c0       	rjmp	.+0      	; 0x140 <ht16k33_init+0x46>
+ 176:	b4 df       	rcall	.-152    	; 0xe0 <i2c_write>
+ 178:	ab df       	rcall	.-170    	; 0xd0 <i2c_stop>
+ 17a:	8f e1       	ldi	r24, 0x1F	; 31
+ 17c:	9e e4       	ldi	r25, 0x4E	; 78
+ 17e:	01 97       	sbiw	r24, 0x01	; 1
+ 180:	f1 f7       	brne	.-4      	; 0x17e <init_ht16k33+0x4e>
 	_delay_ms(10);  // Small delay for display to turn on
 
 	i2c_start();
- 140:	00 00       	nop
- 142:	be df       	rcall	.-132    	; 0xc0 <i2c_start>
+ 182:	00 c0       	rjmp	.+0      	; 0x184 <init_ht16k33+0x54>
+ 184:	00 00       	nop
 	i2c_write((HT16K33_ADDR << 1) | 0);
- 144:	88 ee       	ldi	r24, 0xE8	; 232
- 146:	cc df       	rcall	.-104    	; 0xe0 <i2c_write>
- 148:	8f ee       	ldi	r24, 0xEF	; 239
+ 186:	9c df       	rcall	.-200    	; 0xc0 <i2c_start>
+ 188:	88 ee       	ldi	r24, 0xE8	; 232
+ 18a:	aa df       	rcall	.-172    	; 0xe0 <i2c_write>
 	i2c_write(0xEF); // Brightness: max
- 14a:	ca df       	rcall	.-108    	; 0xe0 <i2c_write>
- 14c:	c1 df       	rcall	.-126    	; 0xd0 <i2c_stop>
- 14e:	8f e1       	ldi	r24, 0x1F	; 31
+ 18c:	8f ee       	ldi	r24, 0xEF	; 239
+ 18e:	a8 df       	rcall	.-176    	; 0xe0 <i2c_write>
+ 190:	9f df       	rcall	.-194    	; 0xd0 <i2c_stop>
 	i2c_stop();
- 150:	9e e4       	ldi	r25, 0x4E	; 78
- 152:	01 97       	sbiw	r24, 0x01	; 1
- 154:	f1 f7       	brne	.-4      	; 0x152 <ht16k33_init+0x58>
- 156:	00 c0       	rjmp	.+0      	; 0x158 <ht16k33_init+0x5e>
- 158:	00 00       	nop
- 15a:	08 95       	ret
+ 192:	8f e1       	ldi	r24, 0x1F	; 31
+ 194:	9e e4       	ldi	r25, 0x4E	; 78
+ 196:	01 97       	sbiw	r24, 0x01	; 1
+ 198:	f1 f7       	brne	.-4      	; 0x196 <init_ht16k33+0x66>
+ 19a:	00 c0       	rjmp	.+0      	; 0x19c <init_ht16k33+0x6c>
+ 19c:	00 00       	nop
+ 19e:	ad cf       	rjmp	.-166    	; 0xfa <clear_matrix>
+ 1a0:	08 95       	ret
 
-0000015c <clear_matrix>:
- 15c:	cf 93       	push	r28
- 15e:	df 93       	push	r29
- 160:	c0 e0       	ldi	r28, 0x00	; 0
+000001a2 <setrow>:
 	_delay_ms(10);  // Small delay for brightness adjustment
-}
-
-// Function to clear the matrix (turn off all pixels)
-void clear_matrix(void) {
-	for (uint8_t col = 0; col < 8; col++) {
- 162:	10 c0       	rjmp	.+32     	; 0x184 <clear_matrix+0x28>
-		uint8_t addr = col * 2;
- 164:	dc 2f       	mov	r29, r28
- 166:	dd 0f       	add	r29, r29
-		display_buffer[addr] = 0x00;
- 168:	ed 2f       	mov	r30, r29
- 16a:	f0 e0       	ldi	r31, 0x00	; 0
- 16c:	e0 50       	subi	r30, 0x00	; 0
- 16e:	ff 4f       	sbci	r31, 0xFF	; 255
- 170:	10 82       	st	Z, r1
-
-		i2c_start();
- 172:	a6 df       	rcall	.-180    	; 0xc0 <i2c_start>
-		i2c_write((HT16K33_ADDR << 1) | 0);
- 174:	88 ee       	ldi	r24, 0xE8	; 232
- 176:	b4 df       	rcall	.-152    	; 0xe0 <i2c_write>
-		i2c_write(addr);
- 178:	8d 2f       	mov	r24, r29
- 17a:	b2 df       	rcall	.-156    	; 0xe0 <i2c_write>
-		i2c_write(0x00);
- 17c:	80 e0       	ldi	r24, 0x00	; 0
- 17e:	b0 df       	rcall	.-160    	; 0xe0 <i2c_write>
- 180:	a7 df       	rcall	.-178    	; 0xd0 <i2c_stop>
-		i2c_stop();
- 182:	cf 5f       	subi	r28, 0xFF	; 255
- 184:	c8 30       	cpi	r28, 0x08	; 8
-	_delay_ms(10);  // Small delay for brightness adjustment
-}
-
-// Function to clear the matrix (turn off all pixels)
-void clear_matrix(void) {
-	for (uint8_t col = 0; col < 8; col++) {
- 186:	70 f3       	brcs	.-36     	; 0x164 <clear_matrix+0x8>
- 188:	df 91       	pop	r29
- 18a:	cf 91       	pop	r28
-		i2c_write((HT16K33_ADDR << 1) | 0);
-		i2c_write(addr);
-		i2c_write(0x00);
+	
+	clear_matrix();
+ 1a2:	0f 93       	push	r16
+ 1a4:	1f 93       	push	r17
+ 1a6:	cf 93       	push	r28
 		i2c_stop();
 	}
 }
- 18c:	08 95       	ret
 
-0000018e <adcMin>:
- 18e:	80 91 10 01 	lds	r24, 0x0110	; 0x800110 <adcMaxPassed>
+void setrow(int row, int vallue)
+{
+ 1a8:	df 93       	push	r29
+	if (row < 0 || row > 8) return; //out of bounds
+ 1aa:	89 30       	cpi	r24, 0x09	; 9
+ 1ac:	91 05       	cpc	r25, r1
+ 1ae:	b0 f4       	brcc	.+44     	; 0x1dc <setrow+0x3a>
+	int addr = row * 2; 
+ 1b0:	8c 01       	movw	r16, r24
+ 1b2:	00 0f       	add	r16, r16
+ 1b4:	11 1f       	adc	r17, r17
+	int led_vallues = (vallue >> 1) | ((vallue & 0x01) << 7);
+ 1b6:	eb 01       	movw	r28, r22
+ 1b8:	d5 95       	asr	r29
+ 1ba:	c7 95       	ror	r28
+ 1bc:	76 95       	lsr	r23
+ 1be:	76 2f       	mov	r23, r22
+ 1c0:	66 27       	eor	r22, r22
+ 1c2:	77 95       	ror	r23
+ 1c4:	67 95       	ror	r22
+ 1c6:	77 27       	eor	r23, r23
+ 1c8:	c6 2b       	or	r28, r22
+ 1ca:	d7 2b       	or	r29, r23
+	
+	i2c_start();
+ 1cc:	79 df       	rcall	.-270    	; 0xc0 <i2c_start>
+	i2c_write((HT16K33_ADDR << 1) | 0);
+ 1ce:	88 ee       	ldi	r24, 0xE8	; 232
+ 1d0:	87 df       	rcall	.-242    	; 0xe0 <i2c_write>
+	i2c_write(addr);
+ 1d2:	80 2f       	mov	r24, r16
+ 1d4:	85 df       	rcall	.-246    	; 0xe0 <i2c_write>
+	i2c_write(led_vallues);
+ 1d6:	8c 2f       	mov	r24, r28
+ 1d8:	83 df       	rcall	.-250    	; 0xe0 <i2c_write>
+ 1da:	7a df       	rcall	.-268    	; 0xd0 <i2c_stop>
+	i2c_stop();
+ 1dc:	df 91       	pop	r29
+ 1de:	cf 91       	pop	r28
+}
+ 1e0:	1f 91       	pop	r17
+ 1e2:	0f 91       	pop	r16
+ 1e4:	08 95       	ret
+
+000001e6 <adcMin>:
+ 1e6:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
 }
 
 
 void adcMin( void )
 {
 	if (adcMaxPassed)
- 192:	90 91 11 01 	lds	r25, 0x0111	; 0x800111 <adcMaxPassed+0x1>
- 196:	89 2b       	or	r24, r25
- 198:	49 f0       	breq	.+18     	; 0x1ac <adcMin+0x1e>
+ 1ea:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 1ee:	89 2b       	or	r24, r25
+ 1f0:	49 f0       	breq	.+18     	; 0x204 <adcMin+0x1e>
 	{
 		PORTC = 1;
- 19a:	81 e0       	ldi	r24, 0x01	; 1
- 19c:	85 bb       	out	0x15, r24	; 21
+ 1f2:	81 e0       	ldi	r24, 0x01	; 1
+ 1f4:	85 bb       	out	0x15, r24	; 21
 		PORTD = mscount;
- 19e:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <mscount>
- 1a2:	82 bb       	out	0x12, r24	; 18
+ 1f6:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <mscount>
+ 1fa:	82 bb       	out	0x12, r24	; 18
 		adcMaxPassed = 0;
- 1a4:	10 92 11 01 	sts	0x0111, r1	; 0x800111 <adcMaxPassed+0x1>
- 1a8:	10 92 10 01 	sts	0x0110, r1	; 0x800110 <adcMaxPassed>
+ 1fc:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 200:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
 	}
 	adcMinPassed = 1;
- 1ac:	81 e0       	ldi	r24, 0x01	; 1
- 1ae:	90 e0       	ldi	r25, 0x00	; 0
- 1b0:	90 93 13 01 	sts	0x0113, r25	; 0x800113 <adcMinPassed+0x1>
- 1b4:	80 93 12 01 	sts	0x0112, r24	; 0x800112 <adcMinPassed>
+ 204:	81 e0       	ldi	r24, 0x01	; 1
+ 206:	90 e0       	ldi	r25, 0x00	; 0
+ 208:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <adcMinPassed+0x1>
+ 20c:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <adcMinPassed>
 	mscount = 0;
- 1b8:	10 92 15 01 	sts	0x0115, r1	; 0x800115 <mscount+0x1>
- 1bc:	10 92 14 01 	sts	0x0114, r1	; 0x800114 <mscount>
- 1c0:	08 95       	ret
+ 210:	10 92 05 01 	sts	0x0105, r1	; 0x800105 <mscount+0x1>
+ 214:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <mscount>
+ 218:	08 95       	ret
 
-000001c2 <adcMax>:
+0000021a <adcMax>:
 }
 
 void adcMax( void )
 {
 	if (adcMinPassed)
- 1c2:	80 91 12 01 	lds	r24, 0x0112	; 0x800112 <adcMinPassed>
- 1c6:	90 91 13 01 	lds	r25, 0x0113	; 0x800113 <adcMinPassed+0x1>
- 1ca:	89 2b       	or	r24, r25
- 1cc:	49 f0       	breq	.+18     	; 0x1e0 <adcMax+0x1e>
+ 21a:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <adcMinPassed>
+ 21e:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <adcMinPassed+0x1>
+ 222:	89 2b       	or	r24, r25
+ 224:	49 f0       	breq	.+18     	; 0x238 <adcMax+0x1e>
 	{
 		PORTC = 3;
- 1ce:	83 e0       	ldi	r24, 0x03	; 3
- 1d0:	85 bb       	out	0x15, r24	; 21
+ 226:	83 e0       	ldi	r24, 0x03	; 3
+ 228:	85 bb       	out	0x15, r24	; 21
 		PORTD = mscount;
- 1d2:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <mscount>
- 1d6:	82 bb       	out	0x12, r24	; 18
+ 22a:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <mscount>
+ 22e:	82 bb       	out	0x12, r24	; 18
 		adcMinPassed = 0;
- 1d8:	10 92 13 01 	sts	0x0113, r1	; 0x800113 <adcMinPassed+0x1>
- 1dc:	10 92 12 01 	sts	0x0112, r1	; 0x800112 <adcMinPassed>
+ 230:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <adcMinPassed+0x1>
+ 234:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <adcMinPassed>
 	}
 	adcMaxPassed = 1;
- 1e0:	81 e0       	ldi	r24, 0x01	; 1
- 1e2:	90 e0       	ldi	r25, 0x00	; 0
- 1e4:	90 93 11 01 	sts	0x0111, r25	; 0x800111 <adcMaxPassed+0x1>
- 1e8:	80 93 10 01 	sts	0x0110, r24	; 0x800110 <adcMaxPassed>
+ 238:	81 e0       	ldi	r24, 0x01	; 1
+ 23a:	90 e0       	ldi	r25, 0x00	; 0
+ 23c:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 240:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
 	mscount = 0;
- 1ec:	10 92 15 01 	sts	0x0115, r1	; 0x800115 <mscount+0x1>
- 1f0:	10 92 14 01 	sts	0x0114, r1	; 0x800114 <mscount>
- 1f4:	08 95       	ret
+ 244:	10 92 05 01 	sts	0x0105, r1	; 0x800105 <mscount+0x1>
+ 248:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <mscount>
+ 24c:	08 95       	ret
 
-000001f6 <__vector_21>:
+0000024e <__vector_21>:
 }
 
 ISR (ADC_vect)
 {
- 1f6:	1f 92       	push	r1
- 1f8:	0f 92       	push	r0
- 1fa:	0f b6       	in	r0, 0x3f	; 63
- 1fc:	0f 92       	push	r0
- 1fe:	11 24       	eor	r1, r1
- 200:	0b b6       	in	r0, 0x3b	; 59
- 202:	0f 92       	push	r0
- 204:	2f 93       	push	r18
- 206:	3f 93       	push	r19
- 208:	4f 93       	push	r20
- 20a:	5f 93       	push	r21
- 20c:	6f 93       	push	r22
- 20e:	7f 93       	push	r23
- 210:	8f 93       	push	r24
- 212:	9f 93       	push	r25
- 214:	af 93       	push	r26
- 216:	bf 93       	push	r27
- 218:	ef 93       	push	r30
- 21a:	ff 93       	push	r31
+ 24e:	1f 92       	push	r1
+ 250:	0f 92       	push	r0
+ 252:	0f b6       	in	r0, 0x3f	; 63
+ 254:	0f 92       	push	r0
+ 256:	11 24       	eor	r1, r1
+ 258:	0b b6       	in	r0, 0x3b	; 59
+ 25a:	0f 92       	push	r0
+ 25c:	2f 93       	push	r18
+ 25e:	3f 93       	push	r19
+ 260:	4f 93       	push	r20
+ 262:	5f 93       	push	r21
+ 264:	6f 93       	push	r22
+ 266:	7f 93       	push	r23
+ 268:	8f 93       	push	r24
+ 26a:	9f 93       	push	r25
+ 26c:	af 93       	push	r26
+ 26e:	bf 93       	push	r27
+ 270:	ef 93       	push	r30
+ 272:	ff 93       	push	r31
 	int l = ADCL;
- 21c:	24 b1       	in	r18, 0x04	; 4
+ 274:	24 b1       	in	r18, 0x04	; 4
 	int h = ADCH;
- 21e:	35 b1       	in	r19, 0x05	; 5
- 220:	83 2f       	mov	r24, r19
- 222:	90 e0       	ldi	r25, 0x00	; 0
+ 276:	35 b1       	in	r19, 0x05	; 5
+ 278:	83 2f       	mov	r24, r19
+ 27a:	90 e0       	ldi	r25, 0x00	; 0
 
 	PORTB = l;			// Show MSB/LSB (bit 10:0) of ADC
- 224:	28 bb       	out	0x18, r18	; 24
+ 27c:	28 bb       	out	0x18, r18	; 24
 	PORTA = h;
- 226:	3b bb       	out	0x1b, r19	; 27
+ 27e:	3b bb       	out	0x1b, r19	; 27
 	
 	
 	int adcOut = (h << 2) | l;
- 228:	88 0f       	add	r24, r24
- 22a:	99 1f       	adc	r25, r25
- 22c:	88 0f       	add	r24, r24
- 22e:	99 1f       	adc	r25, r25
- 230:	82 2b       	or	r24, r18
+ 280:	88 0f       	add	r24, r24
+ 282:	99 1f       	adc	r25, r25
+ 284:	88 0f       	add	r24, r24
+ 286:	99 1f       	adc	r25, r25
+ 288:	82 2b       	or	r24, r18
 	if (adcOut < ADCMIN)
- 232:	80 31       	cpi	r24, 0x10	; 16
- 234:	91 05       	cpc	r25, r1
- 236:	14 f4       	brge	.+4      	; 0x23c <__vector_21+0x46>
+ 28a:	80 31       	cpi	r24, 0x10	; 16
+ 28c:	91 05       	cpc	r25, r1
+ 28e:	14 f4       	brge	.+4      	; 0x294 <__vector_21+0x46>
 	{
 		adcMin();
- 238:	aa df       	rcall	.-172    	; 0x18e <adcMin>
- 23a:	04 c0       	rjmp	.+8      	; 0x244 <__vector_21+0x4e>
+ 290:	aa df       	rcall	.-172    	; 0x1e6 <adcMin>
+ 292:	04 c0       	rjmp	.+8      	; 0x29c <__vector_21+0x4e>
 	}
 	else if (adcOut > ADCMAX)
- 23c:	80 3c       	cpi	r24, 0xC0	; 192
- 23e:	93 40       	sbci	r25, 0x03	; 3
+ 294:	80 3c       	cpi	r24, 0xC0	; 192
+ 296:	93 40       	sbci	r25, 0x03	; 3
 	{
 		adcMax();
- 240:	0c f0       	brlt	.+2      	; 0x244 <__vector_21+0x4e>
- 242:	bf df       	rcall	.-130    	; 0x1c2 <adcMax>
+ 298:	0c f0       	brlt	.+2      	; 0x29c <__vector_21+0x4e>
+ 29a:	bf df       	rcall	.-130    	; 0x21a <adcMax>
 	}
 }
- 244:	ff 91       	pop	r31
- 246:	ef 91       	pop	r30
- 248:	bf 91       	pop	r27
- 24a:	af 91       	pop	r26
- 24c:	9f 91       	pop	r25
- 24e:	8f 91       	pop	r24
- 250:	7f 91       	pop	r23
- 252:	6f 91       	pop	r22
- 254:	5f 91       	pop	r21
- 256:	4f 91       	pop	r20
- 258:	3f 91       	pop	r19
- 25a:	2f 91       	pop	r18
- 25c:	0f 90       	pop	r0
- 25e:	0b be       	out	0x3b, r0	; 59
- 260:	0f 90       	pop	r0
- 262:	0f be       	out	0x3f, r0	; 63
- 264:	0f 90       	pop	r0
- 266:	1f 90       	pop	r1
- 268:	18 95       	reti
+ 29c:	ff 91       	pop	r31
+ 29e:	ef 91       	pop	r30
+ 2a0:	bf 91       	pop	r27
+ 2a2:	af 91       	pop	r26
+ 2a4:	9f 91       	pop	r25
+ 2a6:	8f 91       	pop	r24
+ 2a8:	7f 91       	pop	r23
+ 2aa:	6f 91       	pop	r22
+ 2ac:	5f 91       	pop	r21
+ 2ae:	4f 91       	pop	r20
+ 2b0:	3f 91       	pop	r19
+ 2b2:	2f 91       	pop	r18
+ 2b4:	0f 90       	pop	r0
+ 2b6:	0b be       	out	0x3b, r0	; 59
+ 2b8:	0f 90       	pop	r0
+ 2ba:	0f be       	out	0x3f, r0	; 63
+ 2bc:	0f 90       	pop	r0
+ 2be:	1f 90       	pop	r1
+ 2c0:	18 95       	reti
 
-0000026a <__vector_9>:
+000002c2 <__vector_9>:
 
 ISR(TIMER2_COMP_vect)
 {
- 26a:	1f 92       	push	r1
- 26c:	0f 92       	push	r0
- 26e:	0f b6       	in	r0, 0x3f	; 63
- 270:	0f 92       	push	r0
- 272:	11 24       	eor	r1, r1
- 274:	8f 93       	push	r24
- 276:	9f 93       	push	r25
+ 2c2:	1f 92       	push	r1
+ 2c4:	0f 92       	push	r0
+ 2c6:	0f b6       	in	r0, 0x3f	; 63
+ 2c8:	0f 92       	push	r0
+ 2ca:	11 24       	eor	r1, r1
+ 2cc:	8f 93       	push	r24
+ 2ce:	9f 93       	push	r25
 	mscount++;
- 278:	80 91 14 01 	lds	r24, 0x0114	; 0x800114 <mscount>
- 27c:	90 91 15 01 	lds	r25, 0x0115	; 0x800115 <mscount+0x1>
- 280:	01 96       	adiw	r24, 0x01	; 1
- 282:	90 93 15 01 	sts	0x0115, r25	; 0x800115 <mscount+0x1>
- 286:	80 93 14 01 	sts	0x0114, r24	; 0x800114 <mscount>
+ 2d0:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <mscount>
+ 2d4:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <mscount+0x1>
+ 2d8:	01 96       	adiw	r24, 0x01	; 1
+ 2da:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <mscount+0x1>
+ 2de:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <mscount>
 }
- 28a:	9f 91       	pop	r25
- 28c:	8f 91       	pop	r24
- 28e:	0f 90       	pop	r0
- 290:	0f be       	out	0x3f, r0	; 63
- 292:	0f 90       	pop	r0
- 294:	1f 90       	pop	r1
- 296:	18 95       	reti
+ 2e2:	9f 91       	pop	r25
+ 2e4:	8f 91       	pop	r24
+ 2e6:	0f 90       	pop	r0
+ 2e8:	0f be       	out	0x3f, r0	; 63
+ 2ea:	0f 90       	pop	r0
+ 2ec:	1f 90       	pop	r1
+ 2ee:	18 95       	reti
 
-00000298 <main>:
-	
+000002f0 <main>:
 	timer2init();
 	sei();
 	adcInit();					// initialize ADC
 	*/
-	i2c_init();    // Initialize I2C (TWI)
- 298:	0a df       	rcall	.-492    	; 0xae <i2c_init>
-	ht16k33_init(); // Initialize HT16K33 matrix
- 29a:	2f df       	rcall	.-418    	; 0xfa <ht16k33_init>
+	
+	init_ht16k33(); // Initialize HT16K33 matrix
+ 2f0:	1f df       	rcall	.-450    	; 0x130 <init_ht16k33>
+	
+	
+	int val = 0x01;
+ 2f2:	c1 e0       	ldi	r28, 0x01	; 1
+ 2f4:	d0 e0       	ldi	r29, 0x00	; 0
+	
+	while (1)
+	{
+		val = val << 1;
+ 2f6:	cc 0f       	add	r28, r28
+ 2f8:	dd 1f       	adc	r29, r29
+		if (val == 0b100000000)
+ 2fa:	c1 15       	cp	r28, r1
+ 2fc:	21 e0       	ldi	r18, 0x01	; 1
+ 2fe:	d2 07       	cpc	r29, r18
+ 300:	11 f4       	brne	.+4      	; 0x306 <main+0x16>
+		{
+			val = 0x01;
+ 302:	c1 e0       	ldi	r28, 0x01	; 1
+ 304:	d0 e0       	ldi	r29, 0x00	; 0
+		}
+		setrow(0, val);
+ 306:	be 01       	movw	r22, r28
+ 308:	80 e0       	ldi	r24, 0x00	; 0
+ 30a:	90 e0       	ldi	r25, 0x00	; 0
+ 30c:	4a df       	rcall	.-364    	; 0x1a2 <setrow>
+ 30e:	8f ef       	ldi	r24, 0xFF	; 255
+ 310:	90 e7       	ldi	r25, 0x70	; 112
+ 312:	22 e0       	ldi	r18, 0x02	; 2
+ 314:	81 50       	subi	r24, 0x01	; 1
+ 316:	90 40       	sbci	r25, 0x00	; 0
+ 318:	20 40       	sbci	r18, 0x00	; 0
+ 31a:	e1 f7       	brne	.-8      	; 0x314 <main+0x24>
+ 31c:	00 c0       	rjmp	.+0      	; 0x31e <main+0x2e>
+ 31e:	00 00       	nop
+ 320:	ea cf       	rjmp	.-44     	; 0x2f6 <main+0x6>
 
-	// Clear the matrix before displaying anything new
-	clear_matrix(); // Turn off all pixels
- 29c:	5f df       	rcall	.-322    	; 0x15c <clear_matrix>
- 29e:	80 e0       	ldi	r24, 0x00	; 0
-	int i;
-	for (i = 0; i < 8; i++) {
- 2a0:	90 e0       	ldi	r25, 0x00	; 0
- 2a2:	01 c0       	rjmp	.+2      	; 0x2a6 <main+0xe>
- 2a4:	01 96       	adiw	r24, 0x01	; 1
- 2a6:	88 30       	cpi	r24, 0x08	; 8
- 2a8:	91 05       	cpc	r25, r1
- 2aa:	e4 f3       	brlt	.-8      	; 0x2a4 <main+0xc>
- 2ac:	ff cf       	rjmp	.-2      	; 0x2ac <main+0x14>
+00000322 <_exit>:
+ 322:	f8 94       	cli
 
-000002ae <_exit>:
- 2ae:	f8 94       	cli
-
-000002b0 <__stop_program>:
- 2b0:	ff cf       	rjmp	.-2      	; 0x2b0 <__stop_program>
+00000324 <__stop_program>:
+ 324:	ff cf       	rjmp	.-2      	; 0x324 <__stop_program>
