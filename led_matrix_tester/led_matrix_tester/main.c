@@ -12,6 +12,8 @@ uint8_t i2c_write(uint8_t data);
 
 // HT16K33 I2C address
 #define HT16K33_ADDR 0x74  // 7-bit address for your HT16K33 matrix
+uint8_t display_buffer[16] = {0};  // Mirrors HT16K33's display RAM (16 bytes)
+
 
 void i2c_init(void) {
 	// Set SCL frequency
@@ -71,25 +73,18 @@ void ht16k33_init(void) {
 
 // Function to clear the matrix (turn off all pixels)
 void clear_matrix(void) {
-	/*
 	for (uint8_t col = 0; col < 8; col++) {
+		uint8_t addr = col * 2;
+		display_buffer[addr] = 0x00;
+
 		i2c_start();
-		i2c_write((HT16K33_ADDR << 1) | 0); // Write mode
-		i2c_write(col); // Column address (0 to 7)
-		i2c_write(0x00); // Clear the column (turn off all pixels)
+		i2c_write((HT16K33_ADDR << 1) | 0);
+		i2c_write(addr);
+		i2c_write(0x00);
 		i2c_stop();
 	}
-	_delay_ms(10); // Wait to ensure the matrix is cleared
-	*/
-	for (uint8_t addr = 0x00; addr <= 0x0F; addr++) {
-		i2c_start();
-		i2c_write((HT16K33_ADDR << 1) | 0); // Write mode
-		i2c_write(addr); // HT16K33 RAM address (0x00 to 0x0F)
-		i2c_write(0x00); // Clear all bits in this address
-		i2c_stop();
-	}
-	_delay_ms(10); // Give time to update
 }
+
 
 // Set the right-most pixel for rows 5, 6, 7, 8
 void set_bottom_rows(void) {
@@ -130,6 +125,28 @@ void set_bottom_rows(void) {
 	_delay_ms(10);
 }
 
+void set_pixel(uint8_t row, uint8_t col, uint8_t on) {
+	if (row > 7 || col > 7) return; // Bounds check
+
+	uint8_t addr = col * 2;               // Even addresses: 0x00, 0x02, ..., 0x0E
+	uint8_t bit = (1 << row);             // Each bit is one row
+
+	if (on)
+	display_buffer[addr] |= bit;
+	else
+	display_buffer[addr] &= ~bit;
+
+	// Send to display
+	i2c_start();
+	i2c_write((HT16K33_ADDR << 1) | 0);
+	i2c_write(addr);
+	i2c_write(display_buffer[addr]);
+	i2c_stop();
+}
+
+
+
+
 int main(void) {
 	// Initialize the system
 	i2c_init();    // Initialize I2C (TWI)
@@ -137,9 +154,13 @@ int main(void) {
 
 	// Clear the matrix before displaying anything new
 	clear_matrix(); // Turn off all pixels
+	int i;
+	for (i = 0; i < 8; i++) {
+		set_pixel(i,i,1);
+	}
 
 	// Set the right-most pixel in rows 5, 6, 7, 8
-	set_bottom_rows();
+	//set_bottom_rows();
 
 	// Main loop (do nothing, let the matrix display the pixels)
 	while (1) {
